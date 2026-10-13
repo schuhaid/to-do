@@ -47,10 +47,10 @@ export default async function TodosPage({ searchParams }: PageProps<"/todos">) {
     filter === "all" ? todos : todos.filter((t) => (filter === "done" ? t.done : !t.done));
 
   return (
-    <div className="mx-auto flex w-full max-w-xl flex-1 flex-col px-4 pb-16">
-      <header className="flex items-center justify-between gap-4 py-6">
+    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-4 pb-16 sm:px-6">
+      <header className="flex items-center justify-between gap-4 py-5">
         <Wordmark />
-        <div className="flex min-w-0 items-center gap-3">
+        <div className="flex min-w-0 items-center gap-2">
           <span className="hidden truncate text-sm text-muted sm:block">{user.email}</span>
           <form action={logout}>
             <button type="submit" className="btn-quiet">Log out</button>
@@ -58,33 +58,39 @@ export default async function TodosPage({ searchParams }: PageProps<"/todos">) {
         </div>
       </header>
 
-      <main className="mt-4 sm:mt-10">
-        <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-          Your tasks
-        </h1>
-        <p className="mt-2 text-muted">
-          {counts.open} open, {counts.done} done
-        </p>
-
-        <div className="mt-8">
-          <AddTodo />
-        </div>
-
-        <div className="mt-8">
-          <FilterTabs current={filter} counts={counts} />
-        </div>
-
-        {visible.length > 0 ? (
-          <ul className="mt-2 divide-y divide-line border-y border-line">
-            {visible.map((todo) => (
-              <TodoItem key={todo.id} todo={todo} />
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-2 border-y border-line py-10 text-center text-muted">
-            {emptyText[filter]}
+      <main className="mt-6 sm:mt-12">
+        <div className="mb-6 px-1">
+          <h1 className="text-[28px] font-semibold leading-tight tracking-tight sm:text-[32px]">
+            Your tasks
+          </h1>
+          <p className="mt-1 text-muted">
+            {counts.all === 0
+              ? "Nothing on your list yet."
+              : `${counts.open} open, ${counts.done} done`}
           </p>
-        )}
+        </div>
+
+        <section className="panel overflow-hidden">
+          <div className="p-4 sm:p-5">
+            <AddTodo />
+          </div>
+
+          <div className="border-t border-line px-4 py-3 sm:px-5">
+            <FilterTabs current={filter} counts={counts} />
+          </div>
+
+          {visible.length > 0 ? (
+            <ul className="divide-y divide-line border-t border-line">
+              {visible.map((todo) => (
+                <TodoItem key={todo.id} todo={todo} />
+              ))}
+            </ul>
+          ) : (
+            <p className="border-t border-line px-5 py-14 text-center text-muted">
+              {emptyText[filter]}
+            </p>
+          )}
+        </section>
       </main>
     </div>
   );

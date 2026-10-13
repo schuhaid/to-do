@@ -14,7 +14,7 @@ export default function AddTodo() {
         required
         maxLength={500}
         autoComplete="off"
-        placeholder="What needs doing?"
+        placeholder="Add a task…"
         className="field flex-1"
       />
       <AddButton />

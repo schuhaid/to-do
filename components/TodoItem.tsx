@@ -32,7 +32,11 @@ export default function TodoItem({ todo }: { todo: Todo }) {
   }
 
   return (
-    <li className={`group flex items-center gap-3 py-3 ${pending ? "opacity-60" : ""}`}>
+    <li
+      className={`group flex items-center gap-3.5 px-4 py-3 transition-colors hover:bg-hover sm:px-5 ${
+        pending ? "opacity-60" : ""
+      }`}
+    >
       <button
         type="button"
         role="checkbox"
@@ -41,13 +45,13 @@ export default function TodoItem({ todo }: { todo: Todo }) {
         onClick={toggle}
         className={`check ${done ? "check-on" : ""}`}
       >
-        <svg viewBox="0 0 16 16" aria-hidden="true">
-          <path d="M3.5 8.5l3 3 6-6.5" />
+        <svg viewBox="0 0 12 12" aria-hidden="true">
+          <path d="M2.5 6.3l2.3 2.3 4.7-5" />
         </svg>
       </button>
 
       {editing ? (
-        <form action={save} className="flex flex-1 gap-2">
+        <form action={save} className="flex flex-1 items-center gap-2">
           <label htmlFor={`edit-${todo.id}`} className="sr-only">Edit task</label>
           <input
             id={`edit-${todo.id}`}
@@ -57,18 +61,24 @@ export default function TodoItem({ todo }: { todo: Todo }) {
             maxLength={500}
             autoFocus
             onKeyDown={(e) => e.key === "Escape" && setEditing(false)}
-            className="field flex-1 py-1.5"
+            className="field flex-1 py-2"
           />
-          <button type="submit" className="btn-quiet">Save</button>
+          <button type="submit" className="btn px-4 py-2 text-sm">Save</button>
+          <button type="button" onClick={() => setEditing(false)} className="btn-quiet">
+            Cancel
+          </button>
         </form>
       ) : (
         <>
-          <span className="min-w-0 flex-1 break-words">
-            <span className={`marker ${done ? "marker-on text-muted" : ""}`}>{title}</span>
+          <span
+            onDoubleClick={() => setEditing(true)}
+            className={`task-title min-w-0 flex-1 break-words py-1 ${done ? "task-done" : ""}`}
+          >
+            {title}
           </span>
-          <div className="flex shrink-0 gap-0.5 sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+          <div className="flex shrink-0 gap-0.5 text-faint sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
             <IconButton label={`Edit "${title}"`} onClick={() => setEditing(true)}>
-              <path d="M11.5 2.5l2 2L6 12l-3 1 1-3 7.5-7.5z" />
+              <path d="M10.8 2.7l2.5 2.5-7.6 7.6-3.2.7.7-3.2 7.6-7.6z" />
             </IconButton>
             <IconButton label={`Delete "${title}"`} onClick={remove} danger>
               <path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.5h5.8l.6-8.5" />
@@ -97,7 +107,7 @@ function IconButton({
       onClick={onClick}
       aria-label={label}
       title={label}
-      className={`grid size-9 place-items-center rounded-lg text-muted transition-colors hover:bg-hover ${
+      className={`grid size-9 place-items-center rounded-lg transition-colors hover:bg-panel ${
         danger ? "hover:text-danger" : "hover:text-ink"
       }`}
     >

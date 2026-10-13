@@ -1,10 +1,10 @@
-// The app's name with a small ticked box as its mark.
+// The app's name with a small round tick as its mark.
 export default function Wordmark() {
   return (
-    <span className="inline-flex items-center gap-2 font-display text-lg font-semibold tracking-tight">
+    <span className="inline-flex items-center gap-2 text-[17px] font-semibold tracking-tight">
       <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
-        <rect x="1" y="1" width="20" height="20" rx="6" className="fill-highlight" />
-        <path d="M6 11.5l3.2 3.2L16 7.8" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="11" cy="11" r="11" className="fill-accent" />
+        <path d="M6.5 11.5l3 3 6-6.5" fill="none" className="stroke-accent-ink" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
       Ticked
     </span>

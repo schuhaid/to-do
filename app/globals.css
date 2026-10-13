@@ -1,116 +1,137 @@
 @import "tailwindcss";
 
-/* Design tokens: graphite ink on cool paper, with one highlighter yellow. */
+/* Calm palette: cool mist background, white panel, ink text, one sage accent. */
 :root {
-  --paper: #f5f6f8;
-  --surface: #ffffff;
-  --ink: #1d2230;
-  --muted: #646c7e;
-  --line: #dde1e8;
-  --hover: #e9ecf1;
-  --highlight: #ffe15a;
-  --marker: #ffe15a;
-  --danger: #b4232f;
-  --danger-soft: #fbe9ea;
-  --focus: #3557e6;
+  --bg: #f3f5f7;
+  --panel: #ffffff;
+  --ink: #1f2530;
+  --muted: #6a7282;
+  --faint: #a3aab6;
+  --line: #e7eaef;
+  --hover: #f5f7f9;
+  --accent: #3f7a66;
+  --accent-ink: #ffffff;
+  --accent-soft: #e6f0ec;
+  --danger: #b4363f;
+  --danger-soft: #fbecec;
+  --shadow: 0 1px 2px rgb(31 37 48 / 0.04), 0 8px 24px -12px rgb(31 37 48 / 0.12);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #15181e;
-    --surface: #1d2129;
-    --ink: #e8ebf1;
-    --muted: #98a0b1;
-    --line: #2c323d;
-    --hover: #252a34;
-    --highlight: #d9b52a;
-    --marker: rgb(255 214 60 / 0.3);
-    --danger: #f2858d;
-    --danger-soft: #3a1d21;
-    --focus: #8aa2ff;
+    --bg: #121418;
+    --panel: #1a1d23;
+    --ink: #e7e9ed;
+    --muted: #979eab;
+    --faint: #5f6673;
+    --line: #272b33;
+    --hover: #20242b;
+    --accent: #7fb39f;
+    --accent-ink: #10221b;
+    --accent-soft: #1f2d28;
+    --danger: #f08b91;
+    --danger-soft: #331d20;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -16px rgb(0 0 0 / 0.6);
   }
 }
 
 @theme inline {
-  --color-paper: var(--paper);
-  --color-surface: var(--surface);
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
+  --color-faint: var(--faint);
   --color-line: var(--line);
   --color-hover: var(--hover);
-  --color-highlight: var(--highlight);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
   --color-danger: var(--danger);
   --color-danger-soft: var(--danger-soft);
-  --font-sans: "Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Hanken Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
-  background: var(--paper);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-sans);
-  line-height: 1.5;
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
 
 :focus-visible {
-  outline: 2px solid var(--focus);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
 @layer components {
+  .panel {
+    @apply rounded-2xl border border-line bg-panel;
+    box-shadow: var(--shadow);
+  }
+
   .field {
-    @apply block w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-base text-ink placeholder:text-muted;
+    @apply block w-full rounded-xl border border-line bg-panel px-4 py-3 text-base text-ink placeholder:text-faint transition-colors;
+  }
+  .field:hover {
+    border-color: color-mix(in srgb, var(--muted) 35%, var(--line));
   }
   .field:focus {
-    @apply border-transparent outline-2 outline-offset-0;
-    outline-color: var(--focus);
+    @apply outline-none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
   }
 
   .btn {
-    @apply inline-flex items-center justify-center rounded-xl bg-ink px-5 py-2.5 font-bold text-paper transition-opacity hover:opacity-85 disabled:opacity-50;
+    @apply inline-flex items-center justify-center rounded-xl bg-accent px-5 py-3 font-semibold text-accent-ink transition-[filter,opacity] hover:brightness-110 disabled:opacity-60;
   }
   .btn-quiet {
-    @apply rounded-lg px-3 py-1.5 text-sm font-bold text-muted transition-colors hover:bg-hover hover:text-ink;
+    @apply rounded-lg px-3 py-1.5 text-sm font-medium text-muted transition-colors hover:bg-hover hover:text-ink;
   }
   .link {
-    @apply font-bold text-ink underline decoration-2 underline-offset-4;
-    text-decoration-color: var(--highlight);
+    @apply font-semibold text-accent underline-offset-4 hover:underline;
   }
 
-  /* Checkbox: fills with highlighter yellow when done. */
+  /* Round checkbox: fills with the accent and draws its tick. */
   .check {
-    @apply grid size-6 shrink-0 place-items-center rounded-md border-2 border-muted/60 transition-colors hover:border-ink;
+    @apply grid size-[22px] shrink-0 place-items-center rounded-full border-[1.5px] transition-colors;
+    border-color: var(--faint);
+  }
+  .check:hover {
+    border-color: var(--accent);
   }
   .check svg {
-    @apply size-4 opacity-0;
+    @apply size-3;
     fill: none;
-    stroke: var(--ink);
-    stroke-width: 2.2;
+    stroke: var(--accent-ink);
+    stroke-width: 2.4;
     stroke-linecap: round;
     stroke-linejoin: round;
+    stroke-dasharray: 16;
+    stroke-dashoffset: 16;
+    transition: stroke-dashoffset 220ms ease-out 60ms;
   }
   .check-on {
-    @apply border-highlight bg-highlight;
+    background: var(--accent);
+    border-color: var(--accent);
   }
   .check-on svg {
-    @apply opacity-100;
+    stroke-dashoffset: 0;
   }
 
-  /* The signature detail: done tasks get a highlighter swipe. */
-  .marker {
-    background-image: linear-gradient(var(--marker), var(--marker));
-    background-repeat: no-repeat;
-    background-position: 0 85%;
-    background-size: 0% 0.55em;
-    transition: background-size 280ms ease-out, color 200ms;
-    box-decoration-break: clone;
-    -webkit-box-decoration-break: clone;
+  .task-title {
+    transition: color 200ms;
+    text-decoration-line: line-through;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
   }
-  .marker-on {
-    background-size: 100% 0.55em;
+  .task-done {
+    color: var(--faint);
+    text-decoration-color: var(--faint);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marker { transition: none; }
+  .check svg { transition: none; }
 }
