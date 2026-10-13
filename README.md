@@ -7,26 +7,52 @@ Built with **Next.js 16** (App Router, TypeScript), **Supabase** (Postgres + Aut
 ## Features
 
 - Sign up, log in, log out (email + password)
-- Add, edit, check off and delete tasks
-- Filter by all / open / done
-- Private by design: Row Level Security in the database makes sure each user only ever sees their own rows
+- Tasks: add, rename, check off, delete; filter by all / open / done
+- **Subtasks** on every task: add, rename, check off, delete, reorder (↑ ↓). The task shows its progress ("3/5 done")
+- **Notes** on subtasks: free text with Markdown, hidden until you expand the subtask
+- **Due dates** on tasks and subtasks. Overdue items turn red, items due today amber, items due in the next 3 days green
+- **Priorities** (none / low / medium / high) and **tags** (type `#school` straight into the new-task field)
+- **Search** across tasks, subtasks and tags; filter by due date and tag; sort smart / by due date / by priority / newest
+- **Dashboard**: open vs done, completed in the last 30 days, upcoming deadlines, progress per task
+- **Graph**: an Obsidian-style map of all tasks, subtasks and tags. Zoom, pan, drag; click a node to open the task
+- **Keyboard shortcuts**: `n` new task, `/` search, `1` `2` `3` switch views, `?` show all
+- Private by design: Row Level Security makes sure each user only ever sees their own rows
+
+## Using the views
+
+| View | URL | What it's for |
+| --- | --- | --- |
+| List | `/todos` | Everyday use. Click a task's title to open it; double-click to rename it in place |
+| Task | `/todos/<id>` | Due date, priority, tags, and the subtasks with their notes |
+| Dashboard | `/dashboard` | What's left and what's coming up. Tiles link to the matching filtered list |
+| Graph | `/graph` | The big picture. Toggle subtasks, tags and done items; "Fit to screen" recenters. On phones subtasks start hidden |
 
 ## Project structure
 
 ```
 app/
-  (auth)/login, (auth)/signup   login and signup pages
-  (auth)/actions.ts             login / signup / logout server actions
-  auth/confirm/route.ts         landing page for email confirmation links
-  todos/page.tsx                the to-do list (server component)
-  todos/actions.ts              add / rename / check off / delete server actions
-components/                     AuthForm, AddTodo, FilterTabs, TodoItem, Wordmark
-lib/supabase/
-  client.ts                     Supabase client for the browser
-  server.ts                     Supabase client for server components and actions
-  proxy.ts                      session refresh and route protection
-proxy.ts                        Next.js proxy (called "middleware" before Next 16)
-supabase/schema.sql             table + RLS policies; run this in Supabase
+  (auth)/login, (auth)/signup     login and signup pages
+  (auth)/actions.ts               login / signup / logout
+  todos/page.tsx                  list view
+  todos/[id]/page.tsx             task page with subtasks
+  todos/actions.ts                all task + subtask server actions
+  dashboard/page.tsx              dashboard
+  graph/page.tsx                  graph view
+  */layout.tsx                    each uses components/AppShell (header, tabs, shortcuts)
+  auth/confirm/route.ts           email confirmation links
+components/
+  task/                           task header, meta editor, subtasks, notes
+  dashboard/                      Recharts charts
+  graph/                          react-force-graph canvas
+lib/
+  data.ts                         every database read (server only)
+  list-query.ts                   list search / filter / sort
+  stats.ts, graph.ts              data for the dashboard and graph
+  dates.ts                        "today", due-date status and formatting
+  supabase/                       Supabase clients + session proxy
+supabase/
+  schema.sql                      base table + RLS (run first)
+  migrations/002_features.sql     subtasks, notes, due dates, priorities, tags (run second)
 ```
 
 ---
@@ -35,7 +61,9 @@ supabase/schema.sql             table + RLS policies; run this in Supabase
 
 1. Go to [supabase.com](https://supabase.com), click **Start your project** and sign up (GitHub or email). New accounts are on the free plan.
 2. Click **New project**. Pick a name (e.g. `todo-app`), set a database password (save it somewhere safe), choose a region near you (e.g. *Central EU (Frankfurt)*) and click **Create new project**. Setup takes about 2 minutes.
-3. **Create the table.** In the left sidebar, open **SQL Editor** and click **New query**. Paste the whole contents of `supabase/schema.sql` and click **Run**. You should see *"Success. No rows returned"*. You can check the result under **Table Editor → todos**, where the table shows an "RLS enabled" badge.
+3. **Create the tables.** In the left sidebar, open **SQL Editor** and click **New query**. Paste the whole contents of `supabase/schema.sql` and click **Run**. You should see *"Success. No rows returned"*. Then do the same with `supabase/migrations/002_features.sql`. Check the result under **Table Editor**: `todos` and `subtasks` both show an "RLS enabled" badge.
+
+   **Upgrading an existing install?** Only run `002_features.sql`. It only adds columns and a table; existing tasks keep all their data, and it's safe to run twice. Run it **before** deploying the new code, otherwise the live app will error until you do.
 4. **Email confirmation.** Go to **Authentication → Sign In / Providers → Email** and find **Confirm email**.
    - **Recommended for this app: off.** Supabase's built-in email service on the free plan only sends a handful of emails per hour, which a group signing up at once will hit. With confirmation off, people are logged in right after signing up.
    - If you leave it **on**, the app still works: users get a "Check your inbox" message, and the link brings them back via `/auth/confirm`. In that case, set the URLs in step 3 of the Vercel section.
@@ -106,8 +134,20 @@ Free Supabase projects are **paused automatically after 7 days without activity*
 - The `anon` role has no access to the table at all, so logged-out requests get nothing.
 - Server actions check the logged-in user again before every change, and they also filter by `user_id`.
 
+## Timezone
+
+"Today", "overdue" and "due soon" are calculated in `Europe/Vienna`, so the server and the browser always agree. To change it, set `NEXT_PUBLIC_APP_TIMEZONE` (e.g. `Europe/Berlin`) in `.env.local` and in Vercel.
+
+## Ideas for later
+
+- **Recurring tasks** (every Monday, monthly): very useful, but needs scheduling logic
+- **Drag & drop** to reorder tasks and subtasks
+- **Undo** after deleting, via a short "Deleted. Undo" toast
+- **Manual light/dark toggle**: the app already follows your system setting
+
 ## Known limitations
 
 - No password reset, social login, sharing or teams (left out on purpose).
 - With "Confirm email" on, Supabase's default email sender has a low hourly limit. For more emails, add your own SMTP provider under **Authentication → Emails → SMTP settings**.
-- No ordering by drag and drop. Open tasks come first, newest at the top.
+- Subtasks are reordered with ↑ ↓ buttons, not drag and drop.
+- The graph draws on a canvas, so it is mouse/touch only. Every task is also reachable from the list.
