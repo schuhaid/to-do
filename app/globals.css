@@ -1,26 +1,116 @@
 @import "tailwindcss";
 
+/* Design tokens: graphite ink on cool paper, with one highlighter yellow. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --paper: #f5f6f8;
+  --surface: #ffffff;
+  --ink: #1d2230;
+  --muted: #646c7e;
+  --line: #dde1e8;
+  --hover: #e9ecf1;
+  --highlight: #ffe15a;
+  --marker: #ffe15a;
+  --danger: #b4232f;
+  --danger-soft: #fbe9ea;
+  --focus: #3557e6;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #15181e;
+    --surface: #1d2129;
+    --ink: #e8ebf1;
+    --muted: #98a0b1;
+    --line: #2c323d;
+    --hover: #252a34;
+    --highlight: #d9b52a;
+    --marker: rgb(255 214 60 / 0.3);
+    --danger: #f2858d;
+    --danger-soft: #3a1d21;
+    --focus: #8aa2ff;
   }
 }
 
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-hover: var(--hover);
+  --color-highlight: var(--highlight);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --font-sans: "Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@layer components {
+  .field {
+    @apply block w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-base text-ink placeholder:text-muted;
+  }
+  .field:focus {
+    @apply border-transparent outline-2 outline-offset-0;
+    outline-color: var(--focus);
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-xl bg-ink px-5 py-2.5 font-bold text-paper transition-opacity hover:opacity-85 disabled:opacity-50;
+  }
+  .btn-quiet {
+    @apply rounded-lg px-3 py-1.5 text-sm font-bold text-muted transition-colors hover:bg-hover hover:text-ink;
+  }
+  .link {
+    @apply font-bold text-ink underline decoration-2 underline-offset-4;
+    text-decoration-color: var(--highlight);
+  }
+
+  /* Checkbox: fills with highlighter yellow when done. */
+  .check {
+    @apply grid size-6 shrink-0 place-items-center rounded-md border-2 border-muted/60 transition-colors hover:border-ink;
+  }
+  .check svg {
+    @apply size-4 opacity-0;
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .check-on {
+    @apply border-highlight bg-highlight;
+  }
+  .check-on svg {
+    @apply opacity-100;
+  }
+
+  /* The signature detail: done tasks get a highlighter swipe. */
+  .marker {
+    background-image: linear-gradient(var(--marker), var(--marker));
+    background-repeat: no-repeat;
+    background-position: 0 85%;
+    background-size: 0% 0.55em;
+    transition: background-size 280ms ease-out, color 200ms;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+  .marker-on {
+    background-size: 100% 0.55em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marker { transition: none; }
 }
