@@ -6,9 +6,8 @@ import AddTodo from "@/components/AddTodo";
 import FilterTabs from "@/components/FilterTabs";
 import ListControls from "@/components/ListControls";
 import TodoItem from "@/components/TodoItem";
-import Icon from "@/components/Icon";
 
-export const metadata: Metadata = { title: "Your tasks · Ticked" };
+export const metadata: Metadata = { title: "Tasks – Ticked" };
 
 export default async function TodosPage({ searchParams }: PageProps<"/todos">) {
   const query = parseListQuery(await searchParams);
@@ -22,60 +21,54 @@ export default async function TodosPage({ searchParams }: PageProps<"/todos">) {
 
   const empty =
     todos.length === 0
-      ? { title: "A clean slate", text: "Add your first task above. Press n anytime to jump there." }
+      ? { title: "No tasks yet", text: "Type your first one above. Press n from anywhere to come back here." }
       : filtered
-        ? { title: "No matches", text: "Nothing fits these filters. Try a different search or due date." }
+        ? { title: "No matches", text: "Nothing fits this search or date. Clear a filter to see more." }
         : query.filter === "open"
-          ? { title: "All clear", text: "Nothing open. Enjoy the quiet." }
-          : { title: "Nothing done yet", text: "Tick something off and it shows up here." };
+          ? { title: "Nothing open", text: "Everything on your list is ticked off." }
+          : { title: "Nothing done yet", text: "Ticked tasks collect here." };
 
   return (
-    <main className="mx-auto w-full max-w-3xl">
-      <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="eyebrow">{formatShortDate(today)}</p>
-          <h1 className="page-title mt-1">Your tasks</h1>
-        </div>
-        {todos.length > 0 && (
-          <div className="w-full sm:w-56" aria-label={`${totalDone} of ${todos.length} tasks done`}>
-            <div className="mb-1.5 flex items-baseline justify-between text-sm">
-              <span className="text-muted">
-                <span className="font-semibold text-ink tabular-nums">{totalOpen}</span> open
+    <main className="mx-auto w-full max-w-[44rem] lg:mx-0">
+      <header className="mb-8">
+        <h1 className="page-title">Tasks</h1>
+        <div className="meta mt-1 flex items-center gap-3">
+          <span>{formatShortDate(today)}</span>
+          {todos.length > 0 && (
+            <span className="flex items-center gap-2" aria-label={`${totalDone} of ${todos.length} tasks done`}>
+              <span className="tabular-nums">
+                {totalOpen} open, {totalDone} done
               </span>
-              <span className="font-semibold tabular-nums text-accent">{pct}% done</span>
-            </div>
-            <div className="h-2 overflow-hidden rounded-full bg-line" aria-hidden="true">
-              <div className="h-full rounded-full bg-accent transition-[width] duration-500" style={{ width: `${pct}%` }} />
-            </div>
-          </div>
-        )}
+              <span className="h-1 w-16 overflow-hidden rounded-full bg-line" aria-hidden="true">
+                <span className="block h-full rounded-full bg-accent transition-[width] duration-300" style={{ width: `${pct}%` }} />
+              </span>
+            </span>
+          )}
+        </div>
       </header>
 
       <AddTodo />
 
-      <div className="mb-3 mt-6 flex flex-col gap-3">
-        <ListControls query={query} />
+      <div className="mt-6 flex flex-col-reverse gap-2 border-b border-line sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <FilterTabs query={query} counts={counts} />
+        <ListControls query={query} />
       </div>
 
       {visible.length > 0 ? (
         <>
-          <ul className="panel overflow-hidden">
-            {visible.map((todo, i) => (
-              <TodoItem key={todo.id} todo={todo} today={today} query={query} index={i} />
+          <ul className="-mx-2 mt-2">
+            {visible.map((todo) => (
+              <TodoItem key={todo.id} todo={todo} today={today} query={query} />
             ))}
           </ul>
-          <p className="mt-3 hidden text-center text-xs text-muted pointer-coarse:block">
+          <p className="meta mt-6 hidden pointer-coarse:block">
             Swipe a task right to tick it off, left to delete it.
           </p>
         </>
       ) : (
-        <div className="panel flex flex-col items-center px-6 py-16 text-center">
-          <span className="mb-4 grid size-12 place-items-center rounded-2xl bg-accent-soft text-accent" aria-hidden="true">
-            <Icon name={todos.length === 0 || query.filter === "open" ? "check" : "search"} className="size-6" strokeWidth={2.2} />
-          </span>
-          <p className="font-bold">{empty.title}</p>
-          <p className="mt-1 max-w-xs text-sm text-muted">{empty.text}</p>
+        <div className="py-16">
+          <p className="font-medium">{empty.title}</p>
+          <p className="meta mt-1 max-w-xs">{empty.text}</p>
         </div>
       )}
     </main>

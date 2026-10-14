@@ -34,7 +34,7 @@ export default function Note({
           rows={Math.min(14, Math.max(4, draft.split("\n").length + 1))}
           maxLength={20000}
           placeholder={"Write anything. Markdown works: **bold**, - lists, [links](https://…)"}
-          className="field resize-y py-2.5 font-mono text-sm leading-relaxed"
+          className="field resize-y text-[0.875rem] leading-relaxed"
         />
         <div className="flex items-center gap-2">
           <button
@@ -48,7 +48,7 @@ export default function Note({
             Save note
           </button>
           <button type="button" onClick={() => setEditing(false)} className="btn-quiet">Cancel</button>
-          <span className="ml-auto hidden text-xs text-faint sm:block">Ctrl + Enter to save</span>
+          <span className="ml-auto hidden text-[0.75rem] text-faint sm:block">Ctrl + Enter to save</span>
         </div>
       </div>
     );
@@ -62,16 +62,16 @@ export default function Note({
           setDraft("");
           setEditing(true);
         }}
-        className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-dashed border-line-strong px-3 text-sm font-semibold text-accent hover:border-accent hover:bg-accent-soft"
+        className="btn-quiet -ml-2.5"
       >
-        + Add a note
+        Add a note
       </button>
     );
   }
 
   return (
     <div>
-      <div className="note-body rounded-[10px] border border-line bg-panel px-4 py-3 text-[15px]">
+      <div className="note-body rounded-md bg-side px-3 py-2.5 text-[0.875rem]">
         <Markdown>{note}</Markdown>
       </div>
       <button
@@ -80,7 +80,7 @@ export default function Note({
           setDraft(note);
           setEditing(true);
         }}
-        className="mt-2 text-sm font-semibold text-accent hover:underline"
+        className="btn-quiet -ml-2.5 mt-1"
       >
         Edit note
       </button>

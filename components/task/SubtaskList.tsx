@@ -4,6 +4,7 @@ import { useOptimistic, useRef, useTransition } from "react";
 import { addSubtask, reorderSubtasks } from "@/app/todos/actions";
 import type { Subtask } from "@/lib/types";
 import SubtaskItem from "./SubtaskItem";
+import Icon from "@/components/Icon";
 
 export default function SubtaskList({
   todoId,
@@ -38,7 +39,7 @@ export default function SubtaskList({
   return (
     <div>
       {items.length > 0 ? (
-        <ul className="border-b border-line">
+        <ul className="-mx-2">
           {items.map((s, i) => (
             <SubtaskItem
               key={s.id}
@@ -51,12 +52,15 @@ export default function SubtaskList({
           ))}
         </ul>
       ) : (
-        <p className="px-5 pt-5 text-sm text-muted sm:px-6">
+        <p className="meta pb-2">
           Break this task into smaller steps. Each one can have its own note and due date.
         </p>
       )}
 
-      <form ref={formRef} action={add} className="flex gap-2 bg-sunken/60 p-4 sm:px-6">
+      <form ref={formRef} action={add} className="mt-1 flex items-center gap-2">
+        <span className="grid size-[18px] shrink-0 place-items-center text-faint" aria-hidden="true">
+          <Icon name="plus" />
+        </span>
         <label htmlFor="new-subtask" className="sr-only">New subtask</label>
         <input
           id="new-subtask"
@@ -64,10 +68,10 @@ export default function SubtaskList({
           required
           maxLength={500}
           autoComplete="off"
-          placeholder="Add a subtask…"
-          className="field min-h-11 flex-1 py-2"
+          placeholder="Add a subtask"
+          className="h-9 min-w-0 flex-1 border-b border-transparent bg-transparent text-ink outline-none placeholder:text-faint focus:border-line"
         />
-        <button type="submit" className="btn">Add</button>
+        <button type="submit" className="btn-quiet">Add</button>
       </form>
     </div>
   );

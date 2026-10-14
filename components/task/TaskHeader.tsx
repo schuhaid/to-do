@@ -32,8 +32,8 @@ export default function TaskHeader({ id, title, done }: { id: string; title: str
   }
 
   return (
-    <div className={`flex items-start gap-3.5 ${pending ? "opacity-70" : ""}`}>
-      <div className="pt-1 sm:pt-1.5">
+    <div className={`flex items-start gap-3 ${pending ? "opacity-70" : ""}`}>
+      <div className="pt-[5px]">
         <Checkbox
           checked={optimisticDone}
           label={optimisticTitle}
@@ -56,15 +56,15 @@ export default function TaskHeader({ id, title, done }: { id: string; title: str
             maxLength={500}
             autoFocus
             onKeyDown={(e) => e.key === "Escape" && setEditing(false)}
-            className="field min-w-0 flex-1 text-lg font-bold"
+            className="field min-w-0 flex-1 text-[1.125rem] font-semibold"
           />
-          <button type="submit" className="btn">Save</button>
+          <button type="submit" className="btn btn-sm">Save</button>
           <button type="button" onClick={() => setEditing(false)} className="btn-quiet">Cancel</button>
         </form>
       ) : (
         <>
           <h1
-            className={`task-title min-w-0 flex-1 break-words text-[22px] font-bold leading-snug tracking-[-0.02em] sm:text-[28px] ${
+            className={`task-title page-title min-w-0 flex-1 break-words ${
               optimisticDone ? "task-done" : ""
             }`}
           >
@@ -72,11 +72,11 @@ export default function TaskHeader({ id, title, done }: { id: string; title: str
           </h1>
           <div className="-mr-2 flex shrink-0 gap-0.5">
             <button type="button" onClick={() => setEditing(true)} className="btn-quiet" aria-label="Rename task">
-              <Icon name="pencil" className="size-4" />
+              <Icon name="pencil" />
               <span className="hidden sm:inline">Rename</span>
             </button>
-            <button type="button" onClick={remove} className="btn-quiet hover:bg-danger-soft! hover:text-danger!" aria-label="Delete task">
-              <Icon name="trash" className="size-4" />
+            <button type="button" onClick={remove} className="btn-quiet hover:text-danger!" aria-label="Delete task">
+              <Icon name="trash" />
               <span className="hidden sm:inline">Delete</span>
             </button>
           </div>

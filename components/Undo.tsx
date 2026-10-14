@@ -101,26 +101,25 @@ export function UndoProvider({ children }: { children: React.ReactNode }) {
     <UndoContext.Provider value={api}>
       {children}
       <div
-        className="pointer-events-none fixed inset-x-0 z-50 flex justify-center px-4 bottom-[calc(env(safe-area-inset-bottom)+5rem)] lg:bottom-6"
+        className="pointer-events-none fixed inset-x-0 z-50 flex justify-center px-4 bottom-[calc(env(safe-area-inset-bottom)+4.5rem)] lg:bottom-6"
         aria-live="polite"
         role="status"
       >
         {toast && (
           <div
             onTransitionEnd={() => !visible && setToast(null)}
-            className={`material flex min-h-12 w-full max-w-sm items-center gap-3 rounded-[16px] border border-[var(--material-line)] py-1.5 pl-4 pr-1.5 text-sm shadow-[var(--shadow-float)] transition-[opacity,transform,filter] duration-300 ease-[cubic-bezier(0.2,0.9,0.25,1)] motion-reduce:transition-opacity ${
-              visible
-                ? "pointer-events-auto translate-y-0 scale-100 opacity-100 blur-0"
-                : "translate-y-4 scale-95 opacity-0 blur-[2px] motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:blur-0"
+            className={`flex min-h-11 w-full max-w-sm items-center gap-3 border border-line bg-paper py-1 pl-3.5 pr-1 text-[0.8125rem] shadow-[var(--shadow-overlay)] transition-[opacity,transform] duration-150 ease-out ${
+              visible ? "pointer-events-auto translate-y-0 opacity-100" : "translate-y-1 opacity-0"
             }`}
+            style={{ borderRadius: "var(--radius-overlay)" }}
           >
-            <Icon name="trash" className="size-4 shrink-0 text-muted" />
+            <Icon name="trash" className="size-3.5 shrink-0 text-muted" />
             <span className="min-w-0 flex-1 truncate font-medium">{toast.label}</span>
             <button
               type="button"
               onClick={undo}
               tabIndex={visible ? 0 : -1}
-              className="press min-h-10 shrink-0 rounded-[11px] px-3.5 font-semibold text-accent hover:bg-accent-soft"
+              className="btn-quiet h-9 shrink-0 font-semibold text-accent hover:text-accent"
             >
               Undo
             </button>
