@@ -14,7 +14,8 @@ Built with **Next.js 16** (App Router, TypeScript), **Supabase** (Postgres + Aut
 - **Priorities** (none / low / medium / high) and **tags** (type `#school` straight into the new-task field)
 - **Search** across tasks, subtasks and tags; filter by due date and tag; sort smart / by due date / by priority / newest
 - **Dashboard**: open vs done, completed in the last 30 days, upcoming deadlines, progress per task
-- **Graph**: an Obsidian-style map of all tasks, subtasks and tags. Zoom, pan, drag; click a node to open the task
+- **Graph**: an Obsidian-style map of all tasks, subtasks and tags. Node size shows weight (switch between priority, urgency and workload), color shows status, a ring shows subtask progress, the heaviest tasks glow, and overdue links pulse. Hover a node to focus its neighbors; click to open it
+- **Feedback button** (sidebar above Shortcuts; top bar on phones): testers write a subject + message and it's emailed to you
 - **Keyboard shortcuts**: `n` new task, `/` search, `1` `2` `3` switch views, `?` show all
 - Private by design: Row Level Security makes sure each user only ever sees their own rows
 
@@ -25,7 +26,7 @@ Built with **Next.js 16** (App Router, TypeScript), **Supabase** (Postgres + Aut
 | Tasks | `/todos` | Everyday use. Click a task's title to open it; double-click to rename it in place |
 | Task | `/todos/<id>` | Due date, priority, tags, and the subtasks with their notes |
 | Dashboard | `/dashboard` | What's left and what's coming up. Tiles link to the matching filtered list |
-| Graph | `/graph` | The big picture. Toggle subtasks, tags and done items; "Fit to screen" recenters. On phones subtasks start hidden |
+| Graph | `/graph` | The big picture. "Size by" switches what node size means; toggle subtasks, tags and done items; "Fit to screen" recenters. On phones subtasks start hidden |
 
 ## Project structure
 
@@ -133,6 +134,19 @@ Free Supabase projects are **paused automatically after 7 days without activity*
 - Row Level Security is enabled, with separate `select` / `insert` / `update` / `delete` policies that all require `auth.uid() = user_id`.
 - The `anon` role has no access to the table at all, so logged-out requests get nothing.
 - Server actions check the logged-in user again before every change, and they also filter by `user_id`.
+
+## Feedback emails (Resend)
+
+The **Feedback** button emails messages to you through [Resend](https://resend.com) (free: 3,000 emails/month).
+
+1. Sign up at resend.com **with the email address that should receive the feedback**.
+2. Go to **API Keys → Create API Key** (permission: *Sending access*) and copy the key (`re_…`).
+3. Add two environment variables, in `.env.local` for local use and in **Vercel → Project → Settings → Environment Variables**:
+   - `RESEND_API_KEY` = the key
+   - `FEEDBACK_TO_EMAIL` = the email you signed up with
+4. Redeploy on Vercel (Deployments → ⋯ → Redeploy).
+
+Without your own domain, Resend sends from `onboarding@resend.dev` and only delivers to your own account email, which is exactly what feedback needs. The tester's email is set as *Reply-To*, so you can answer directly. Until the variables are set, the dialog says feedback isn't set up yet.
 
 ## Timezone
 

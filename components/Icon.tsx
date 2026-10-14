@@ -24,6 +24,8 @@ const PATHS = {
   target: "M12 12m-8.5 0a8.5 8.5 0 1 0 17 0a8.5 8.5 0 1 0-17 0M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0-8 0",
   expand: "M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5",
   lock: "M6 11h12v9H6zM8.5 11V8a3.5 3.5 0 0 1 7 0v3",
+  message: "M4 5h16v11H9l-5 4zM8 9.5h8M8 12.5h5",
+  send: "M4 12l16-8-6 16-2.5-6.5z",
 } as const;
 
 export type IconName = keyof typeof PATHS;
