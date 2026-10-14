@@ -8,6 +8,7 @@ import TaskHeader from "@/components/task/TaskHeader";
 import TaskMeta from "@/components/task/TaskMeta";
 import SubtaskList from "@/components/task/SubtaskList";
 import { ProgressBadge } from "@/components/Badges";
+import Icon from "@/components/Icon";
 
 export const metadata: Metadata = { title: "Task · Ticked" };
 
@@ -21,37 +22,47 @@ export default async function TaskPage({ params }: PageProps<"/todos/[id]">) {
 
   const done = todo.subtasks.filter((s) => s.done).length;
   const total = todo.subtasks.length;
+  const today = todayISO();
 
   return (
-    <main className="mx-auto mt-4 w-full max-w-2xl sm:mt-8">
-      <Link href="/todos" className="btn-quiet -ml-3 mb-4 inline-flex items-center gap-1">
-        <svg viewBox="0 0 16 16" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M10 3.5L5.5 8l4.5 4.5" />
-        </svg>
+    <main className="mx-auto w-full max-w-5xl">
+      <Link href="/todos" className="btn-quiet -ml-3 mb-4">
+        <Icon name="back" className="size-4" strokeWidth={2.2} />
         All tasks
       </Link>
 
-      <section className="panel overflow-hidden">
-        <div className="p-5 sm:p-6">
-          <TaskHeader id={todo.id} title={todo.title} done={todo.done} />
+      <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="min-w-0 space-y-5">
+          <section className="panel p-5 sm:p-6">
+            <TaskHeader id={todo.id} title={todo.title} done={todo.done} />
+          </section>
+
+          <section className="panel overflow-hidden" aria-labelledby="subtasks-title">
+            <div className="flex items-center justify-between gap-3 border-b border-line px-5 py-4 sm:px-6">
+              <h2 id="subtasks-title" className="flex items-center gap-2 font-bold">
+                Subtasks
+                {total > 0 && (
+                  <span className="rounded-full bg-sunken px-2 text-xs font-semibold tabular-nums text-muted">{total}</span>
+                )}
+              </h2>
+              {total > 0 ? <ProgressBadge done={done} total={total} /> : null}
+            </div>
+            <SubtaskList todoId={todo.id} subtasks={todo.subtasks} today={today} />
+          </section>
+        </div>
+
+        <aside className="panel p-5 lg:sticky lg:top-10" aria-label="Task details">
+          <h2 className="eyebrow mb-4">Details</h2>
           <TaskMeta
             id={todo.id}
             dueDate={todo.due_date}
             priority={todo.priority}
             tags={todo.tags}
             done={todo.done}
-            today={todayISO()}
+            today={today}
           />
-        </div>
-
-        <div className="border-t border-line">
-          <div className="flex items-center justify-between gap-3 px-5 pb-1 pt-4 sm:px-6">
-            <h2 className="font-semibold">Subtasks</h2>
-            {total > 0 ? <ProgressBadge done={done} total={total} /> : null}
-          </div>
-          <SubtaskList todoId={todo.id} subtasks={todo.subtasks} today={todayISO()} />
-        </div>
-      </section>
+        </aside>
+      </div>
     </main>
   );
 }

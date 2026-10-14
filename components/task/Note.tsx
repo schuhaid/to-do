@@ -43,7 +43,7 @@ export default function Note({
               onSave(draft.trim() ? draft : null);
               setEditing(false);
             }}
-            className="btn px-4 py-2 text-sm"
+            className="btn btn-sm"
           >
             Save note
           </button>
@@ -62,7 +62,7 @@ export default function Note({
           setDraft("");
           setEditing(true);
         }}
-        className="text-sm font-medium text-accent hover:underline"
+        className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-dashed border-line-strong px-3 text-sm font-semibold text-accent hover:border-accent hover:bg-accent-soft"
       >
         + Add a note
       </button>
@@ -71,7 +71,7 @@ export default function Note({
 
   return (
     <div>
-      <div className="note-body rounded-xl border border-line bg-panel px-4 py-3 text-[15px]">
+      <div className="note-body rounded-[10px] border border-line bg-panel px-4 py-3 text-[15px]">
         <Markdown>{note}</Markdown>
       </div>
       <button
@@ -80,7 +80,7 @@ export default function Note({
           setDraft(note);
           setEditing(true);
         }}
-        className="mt-2 text-sm font-medium text-accent hover:underline"
+        className="mt-2 text-sm font-semibold text-accent hover:underline"
       >
         Edit note
       </button>

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { getTodosWithSubtasks } from "@/lib/data";
 import { applyListQuery, parseListQuery } from "@/lib/list-query";
+import { formatShortDate } from "@/lib/dates";
 import AddTodo from "@/components/AddTodo";
 import FilterTabs from "@/components/FilterTabs";
 import ListControls from "@/components/ListControls";
 import TodoItem from "@/components/TodoItem";
+import Icon from "@/components/Icon";
 
 export const metadata: Metadata = { title: "Your tasks · Ticked" };
 
@@ -15,53 +17,62 @@ export default async function TodosPage({ searchParams }: PageProps<"/todos">) {
 
   const totalOpen = todos.filter((t) => !t.done).length;
   const totalDone = todos.length - totalOpen;
+  const pct = todos.length ? Math.round((totalDone / todos.length) * 100) : 0;
   const filtered = query.q || query.tag || query.due !== "any";
 
-  const emptyText =
+  const empty =
     todos.length === 0
-      ? "No tasks yet. Add your first one above."
+      ? { title: "A clean slate", text: "Add your first task above. Press n anytime to jump there." }
       : filtered
-        ? "No tasks match these filters."
+        ? { title: "No matches", text: "Nothing fits these filters. Try a different search or due date." }
         : query.filter === "open"
-          ? "Nothing open. Enjoy the quiet."
-          : "Nothing checked off yet.";
+          ? { title: "All clear", text: "Nothing open. Enjoy the quiet." }
+          : { title: "Nothing done yet", text: "Tick something off and it shows up here." };
 
   return (
-    <main className="mx-auto mt-4 w-full max-w-2xl sm:mt-8">
-      <div className="mb-6 px-1">
-        <h1 className="text-[28px] font-semibold leading-tight tracking-tight sm:text-[32px]">
-          Your tasks
-        </h1>
-        <p className="mt-1 text-muted">
-          {todos.length === 0 ? "Nothing on your list yet." : `${totalOpen} open, ${totalDone} done`}
-        </p>
+    <main className="mx-auto w-full max-w-3xl">
+      <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="eyebrow">{formatShortDate(today)}</p>
+          <h1 className="page-title mt-1">Your tasks</h1>
+        </div>
+        {todos.length > 0 && (
+          <div className="w-full sm:w-56" aria-label={`${totalDone} of ${todos.length} tasks done`}>
+            <div className="mb-1.5 flex items-baseline justify-between text-sm">
+              <span className="text-muted">
+                <span className="font-semibold text-ink tabular-nums">{totalOpen}</span> open
+              </span>
+              <span className="font-semibold tabular-nums text-accent">{pct}% done</span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-line" aria-hidden="true">
+              <div className="h-full rounded-full bg-accent transition-[width] duration-500" style={{ width: `${pct}%` }} />
+            </div>
+          </div>
+        )}
+      </header>
+
+      <AddTodo />
+
+      <div className="mb-3 mt-6 flex flex-col gap-3">
+        <ListControls query={query} />
+        <FilterTabs query={query} counts={counts} />
       </div>
 
-      <section className="panel overflow-hidden">
-        <div className="p-4 sm:p-5">
-          <AddTodo />
+      {visible.length > 0 ? (
+        <ul className="panel divide-y divide-line overflow-hidden">
+          {visible.map((todo, i) => (
+            <TodoItem key={todo.id} todo={todo} today={today} query={query} index={i} />
+          ))}
+        </ul>
+      ) : (
+        <div className="panel flex flex-col items-center px-6 py-16 text-center">
+          <span className="mb-4 grid size-12 place-items-center rounded-2xl bg-accent-soft text-accent" aria-hidden="true">
+            <Icon name={todos.length === 0 || query.filter === "open" ? "check" : "search"} className="size-6" strokeWidth={2.2} />
+          </span>
+          <p className="font-bold">{empty.title}</p>
+          <p className="mt-1 max-w-xs text-sm text-muted">{empty.text}</p>
         </div>
-
-        <div className="space-y-3 border-t border-line px-4 py-3 sm:px-5">
-          <ListControls query={query} />
-          <FilterTabs query={query} counts={counts} />
-        </div>
-
-        {visible.length > 0 ? (
-          <ul className="divide-y divide-line border-t border-line">
-            {visible.map((todo) => (
-              <TodoItem
-                key={todo.id}
-                todo={todo}
-                today={today}
-                query={query}
-              />
-            ))}
-          </ul>
-        ) : (
-          <p className="border-t border-line px-5 py-14 text-center text-muted">{emptyText}</p>
-        )}
-      </section>
+      )}
     </main>
   );
 }

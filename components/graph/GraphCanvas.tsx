@@ -115,7 +115,7 @@ export default function GraphCanvas({
           (n.kind === "subtask" ? scale > 2.2 : scale > (width < 640 ? 1.3 : 0.45));
         if (!showLabel) return;
         const fontSize = (n.kind === "task" ? 12 : 11) / scale;
-        ctx.font = `${n.kind === "task" ? 600 : 500} ${fontSize}px "Hanken Grotesk Variable", system-ui, sans-serif`;
+        ctx.font = `${n.kind === "task" ? 600 : 500} ${fontSize}px "Plus Jakarta Sans Variable", system-ui, sans-serif`;
         ctx.textAlign = "center";
         ctx.textBaseline = "top";
         const text = n.label.length > 40 ? `${n.label.slice(0, 39)}…` : n.label;

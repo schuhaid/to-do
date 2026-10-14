@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/hanken-grotesk";
+import "@fontsource-variable/plus-jakarta-sans";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f3f5f7" },
-    { media: "(prefers-color-scheme: dark)", color: "#121418" },
+    { media: "(prefers-color-scheme: light)", color: "#f3f7f6" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a1312" },
   ],
 };
 

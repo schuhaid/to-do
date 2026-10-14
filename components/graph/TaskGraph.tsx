@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { GraphLink, GraphNode } from "@/lib/graph";
+import Icon from "@/components/Icon";
 
 // The canvas library touches `window`, so it only loads in the browser.
 const GraphCanvas = dynamic(() => import("./GraphCanvas"), {
@@ -46,15 +47,16 @@ export default function TaskGraph({ nodes, links }: { nodes: GraphNode[]; links:
 
   return (
     <section className="panel overflow-hidden">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-line px-4 py-3 text-sm sm:px-5">
+      <div className="flex flex-wrap items-center gap-2 border-b border-line px-3 py-2.5 text-sm sm:px-4">
         <Toggle checked={showSubtasks} onChange={setShowSubtasks} label="Subtasks" />
         <Toggle checked={showTags} onChange={setShowTags} label="Tags" />
         <Toggle checked={hideDone} onChange={setHideDone} label="Hide done" />
-        <button type="button" onClick={() => setFitSignal((n) => n + 1)} className="btn-quiet ml-auto">
+        <button type="button" onClick={() => setFitSignal((n) => n + 1)} className="btn-outline btn-sm ml-auto">
+          <Icon name="expand" className="size-4" />
           Fit to screen
         </button>
       </div>
-      <div ref={boxRef} className="relative h-[62vh] min-h-[360px] w-full bg-bg/50 sm:h-[68vh]">
+      <div ref={boxRef} className="relative h-[60vh] min-h-[360px] w-full bg-sunken sm:h-[66vh]">
         {size.width > 0 && (
           <GraphCanvas data={data} width={size.width} height={size.height} fitSignal={fitSignal} />
         )}
@@ -68,13 +70,13 @@ export default function TaskGraph({ nodes, links }: { nodes: GraphNode[]; links:
 
 function Toggle({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) {
   return (
-    <label className="inline-flex cursor-pointer items-center gap-2 text-muted hover:text-ink">
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
-        className="size-4 accent-[var(--accent)]"
-      />
+    <label
+      className={`inline-flex min-h-9 items-center gap-2 rounded-full border px-3 font-semibold transition-colors duration-150 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-accent ${
+        checked ? "border-accent/40 bg-accent-soft text-accent" : "border-line text-muted hover:border-line-strong hover:text-ink"
+      }`}
+    >
+      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="sr-only" />
+      <Icon name={checked ? "check" : "plus"} className="size-3.5" strokeWidth={2.6} />
       {label}
     </label>
   );

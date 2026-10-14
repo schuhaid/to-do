@@ -3,11 +3,12 @@
 import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { VIEWS } from "./ViewTabs";
+import Icon from "./Icon";
 
 const SHORTCUTS = [
   ["n", "New task"],
   ["/", "Search"],
-  ["1", "List"],
+  ["1", "Tasks"],
   ["2", "Dashboard"],
   ["3", "Graph"],
   ["?", "Show shortcuts"],
@@ -69,32 +70,41 @@ export default function KeyboardShortcuts() {
       <button
         type="button"
         onClick={() => dialogRef.current?.showModal()}
-        className="btn-quiet hidden sm:block"
-        aria-label="Keyboard shortcuts"
+        className="flex min-h-11 w-full items-center gap-3 rounded-[10px] px-3 text-[15px] font-semibold text-muted transition-colors duration-150 hover:bg-hover hover:text-ink"
         title="Keyboard shortcuts (?)"
       >
-        <kbd className="font-sans">?</kbd>
+        <Icon name="keyboard" className="size-5" />
+        <span className="flex-1 text-left">Shortcuts</span>
+        <kbd className="rounded-md border border-line px-1.5 font-sans text-[11px] font-semibold text-faint">?</kbd>
       </button>
       <dialog
         ref={dialogRef}
         onClick={(e) => e.target === dialogRef.current && dialogRef.current?.close()}
-        className="panel m-auto w-full max-w-xs p-0 text-ink backdrop:bg-black/30"
+        aria-labelledby="shortcuts-title"
+        className="panel m-auto w-full max-w-sm p-0 text-ink backdrop:bg-[var(--overlay)]"
       >
-        <div className="p-5">
-          <h2 className="mb-3 font-semibold">Keyboard shortcuts</h2>
-          <dl className="space-y-2 text-sm">
+        <div className="p-6">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 id="shortcuts-title" className="text-lg font-bold tracking-tight">Keyboard shortcuts</h2>
+            <button
+              type="button"
+              onClick={() => dialogRef.current?.close()}
+              className="grid size-9 place-items-center rounded-lg text-muted hover:bg-hover hover:text-ink"
+              aria-label="Close"
+            >
+              <Icon name="x" className="size-[18px]" />
+            </button>
+          </div>
+          <dl className="divide-y divide-line rounded-[10px] border border-line text-sm">
             {SHORTCUTS.map(([key, label]) => (
-              <div key={key} className="flex items-center justify-between">
+              <div key={key} className="flex items-center justify-between px-4 py-2.5">
                 <dt className="text-muted">{label}</dt>
                 <dd>
-                  <kbd className="rounded-md border border-line bg-hover px-2 py-0.5 font-sans text-xs">{key}</kbd>
+                  <kbd className="inline-grid min-w-7 place-items-center rounded-md border border-line-strong bg-sunken px-2 py-0.5 font-sans text-xs font-semibold">{key}</kbd>
                 </dd>
               </div>
             ))}
           </dl>
-          <button type="button" onClick={() => dialogRef.current?.close()} className="btn mt-5 w-full py-2">
-            Close
-          </button>
         </div>
       </dialog>
     </>

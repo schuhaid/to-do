@@ -22,7 +22,7 @@ Built with **Next.js 16** (App Router, TypeScript), **Supabase** (Postgres + Aut
 
 | View | URL | What it's for |
 | --- | --- | --- |
-| List | `/todos` | Everyday use. Click a task's title to open it; double-click to rename it in place |
+| Tasks | `/todos` | Everyday use. Click a task's title to open it; double-click to rename it in place |
 | Task | `/todos/<id>` | Due date, priority, tags, and the subtasks with their notes |
 | Dashboard | `/dashboard` | What's left and what's coming up. Tiles link to the matching filtered list |
 | Graph | `/graph` | The big picture. Toggle subtasks, tags and done items; "Fit to screen" recenters. On phones subtasks start hidden |

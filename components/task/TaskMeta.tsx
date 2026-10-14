@@ -45,15 +45,16 @@ export default function TaskMeta({
   }
 
   return (
-    <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-[7rem_1fr] sm:items-center sm:gap-x-4 sm:gap-y-3 sm:pl-9">
-      <dt className="font-medium text-muted">Due date</dt>
+    <dl className="space-y-5 text-sm">
+      <div>
+      <dt className="mb-2 font-semibold">Due date</dt>
       <dd className="flex flex-wrap items-center gap-2">
         <input
           type="date"
           aria-label="Due date"
           value={state.dueDate ?? ""}
           onChange={(e) => save({ dueDate: e.target.value || null })}
-          className="field w-auto py-2 text-sm"
+          className="field min-h-10 w-full py-2 text-sm"
         />
         <DueBadge due={state.dueDate} done={done} today={today} />
         {state.dueDate && (
@@ -62,10 +63,12 @@ export default function TaskMeta({
           </button>
         )}
       </dd>
+      </div>
 
-      <dt className="font-medium text-muted">Priority</dt>
+      <div>
+      <dt className="mb-2 font-semibold">Priority</dt>
       <dd>
-        <div role="radiogroup" aria-label="Priority" className="inline-flex flex-wrap rounded-xl bg-hover p-1">
+        <div role="radiogroup" aria-label="Priority" className="segmented grid w-full grid-cols-2 gap-1">
           {PRIORITIES.map((p) => {
             const active = state.priority === p;
             return (
@@ -75,9 +78,7 @@ export default function TaskMeta({
                 role="radio"
                 aria-checked={active}
                 onClick={() => save({ priority: p })}
-                className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-medium transition-colors ${
-                  active ? "bg-panel text-ink shadow-sm" : "text-muted hover:text-ink"
-                }`}
+                className={`segment justify-center ${active ? "segment-on" : ""}`}
               >
                 {p > 0 && <PriorityIcon priority={p} />}
                 {PRIORITY_LABELS[p]}
@@ -86,17 +87,19 @@ export default function TaskMeta({
           })}
         </div>
       </dd>
+      </div>
 
-      <dt className="font-medium text-muted">Tags</dt>
+      <div>
+      <dt className="mb-2 font-semibold">Tags</dt>
       <dd className="flex flex-wrap items-center gap-1.5">
         {state.tags.map((tag) => (
-          <span key={tag} className="inline-flex items-center gap-1 rounded-md bg-hover py-1 pl-2 pr-1 text-xs font-medium text-muted">
+          <span key={tag} className="inline-flex items-center gap-1 rounded-md bg-accent-soft py-1 pl-2 pr-1 text-xs font-semibold text-accent">
             #{tag}
             <button
               type="button"
               onClick={() => save({ tags: state.tags.filter((t) => t !== tag) })}
               aria-label={`Remove tag ${tag}`}
-              className="grid size-4 place-items-center rounded hover:bg-line hover:text-ink"
+              className="grid size-5 place-items-center rounded hover:bg-accent hover:text-accent-ink"
             >
               ×
             </button>
@@ -116,10 +119,11 @@ export default function TaskMeta({
             aria-label="Add a tag"
             placeholder="Add tag…"
             maxLength={30}
-            className="w-28 rounded-md bg-transparent px-1.5 py-1 text-xs outline-none placeholder:text-faint focus:bg-hover"
+            className="min-h-8 w-28 rounded-md border border-dashed border-line-strong bg-transparent px-2 py-1 text-xs outline-none placeholder:text-faint focus:border-accent focus:border-solid"
           />
         )}
       </dd>
+      </div>
     </dl>
   );
 }

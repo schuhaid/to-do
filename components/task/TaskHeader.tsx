@@ -4,6 +4,7 @@ import { useOptimistic, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { deleteTodo, renameTodo, setTodoDone } from "@/app/todos/actions";
 import Checkbox from "@/components/Checkbox";
+import Icon from "@/components/Icon";
 
 export default function TaskHeader({ id, title, done }: { id: string; title: string; done: boolean }) {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function TaskHeader({ id, title, done }: { id: string; title: str
 
   return (
     <div className={`flex items-start gap-3.5 ${pending ? "opacity-70" : ""}`}>
-      <div className="pt-1.5">
+      <div className="pt-1 sm:pt-1.5">
         <Checkbox
           checked={optimisticDone}
           label={optimisticTitle}
@@ -54,23 +55,29 @@ export default function TaskHeader({ id, title, done }: { id: string; title: str
             maxLength={500}
             autoFocus
             onKeyDown={(e) => e.key === "Escape" && setEditing(false)}
-            className="field min-w-0 flex-1 text-lg font-semibold"
+            className="field min-w-0 flex-1 text-lg font-bold"
           />
-          <button type="submit" className="btn py-2.5">Save</button>
+          <button type="submit" className="btn">Save</button>
           <button type="button" onClick={() => setEditing(false)} className="btn-quiet">Cancel</button>
         </form>
       ) : (
         <>
           <h1
-            className={`task-title min-w-0 flex-1 break-words text-xl font-semibold leading-snug tracking-tight sm:text-2xl ${
+            className={`task-title min-w-0 flex-1 break-words text-[22px] font-bold leading-snug tracking-[-0.02em] sm:text-[28px] ${
               optimisticDone ? "task-done" : ""
             }`}
           >
             {optimisticTitle}
           </h1>
-          <div className="flex shrink-0 gap-1">
-            <button type="button" onClick={() => setEditing(true)} className="btn-quiet">Rename</button>
-            <button type="button" onClick={remove} className="btn-quiet hover:text-danger!">Delete</button>
+          <div className="-mr-2 flex shrink-0 gap-0.5">
+            <button type="button" onClick={() => setEditing(true)} className="btn-quiet" aria-label="Rename task">
+              <Icon name="pencil" className="size-4" />
+              <span className="hidden sm:inline">Rename</span>
+            </button>
+            <button type="button" onClick={remove} className="btn-quiet hover:bg-danger-soft! hover:text-danger!" aria-label="Delete task">
+              <Icon name="trash" className="size-4" />
+              <span className="hidden sm:inline">Delete</span>
+            </button>
           </div>
         </>
       )}
