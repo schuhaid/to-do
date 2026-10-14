@@ -27,8 +27,8 @@ export function SideNav() {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`group flex min-h-11 items-center gap-3 rounded-[10px] px-3 text-[15px] font-semibold transition-colors duration-150 ${
-              active ? "bg-accent-soft text-accent" : "text-muted hover:bg-hover hover:text-ink"
+            className={`press group flex min-h-11 items-center gap-3 rounded-[10px] px-3 text-[0.9375rem] font-semibold ${
+              active ? "bg-panel text-accent shadow-[0_1px_2px_rgb(0_0_0/0.06)]" : "text-muted hover:bg-hover hover:text-ink active:bg-sunken"
             }`}
           >
             <Icon name={icon} className="size-5" strokeWidth={active ? 2.1 : 1.8} />
@@ -53,7 +53,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Views"
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-panel/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
+      className="material fixed inset-x-0 bottom-0 z-30 pb-[env(safe-area-inset-bottom)] shadow-[0_-0.5px_0_var(--material-line),inset_0_0.5px_0_var(--material-edge)] lg:hidden"
     >
       <div className="mx-auto flex max-w-md">
         {VIEWS.map(({ href, label, icon }) => {
@@ -63,17 +63,11 @@ export function BottomNav() {
               key={href}
               href={href}
               aria-current={active ? "page" : undefined}
-              className={`flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-xs font-semibold transition-colors duration-150 ${
+              className={`press flex min-h-[3.25rem] flex-1 flex-col items-center justify-center gap-0.5 pt-1 text-[0.6875rem] font-semibold tracking-[0.01em] ${
                 active ? "text-accent" : "text-muted hover:text-ink"
               }`}
             >
-              <span
-                className={`grid h-7 w-12 place-items-center rounded-full transition-colors duration-150 ${
-                  active ? "bg-accent-soft" : ""
-                }`}
-              >
-                <Icon name={icon} className="size-5" strokeWidth={active ? 2.1 : 1.8} />
-              </span>
+              <Icon name={icon} className="size-[26px]" strokeWidth={active ? 2.2 : 1.7} />
               {label}
             </Link>
           );

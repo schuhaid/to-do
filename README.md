@@ -16,7 +16,9 @@ Built with **Next.js 16** (App Router, TypeScript), **Supabase** (Postgres + Aut
 - **Dashboard**: open vs done, completed in the last 30 days, upcoming deadlines, progress per task
 - **Graph**: an Obsidian-style map of all tasks, subtasks and tags. Node size shows weight (switch between priority, urgency and workload), color shows status, a ring shows subtask progress, the heaviest tasks glow, and overdue links pulse. Hover a node to focus its neighbors; click to open it
 - **Feedback button** (sidebar above Shortcuts; top bar on phones): testers write a subject + message and it's emailed to you
-- **Keyboard shortcuts**: `n` new task, `/` search, `1` `2` `3` switch views, `?` show all
+- **Keyboard shortcuts**: `n` new task, `/` search, `1` `2` `3` switch views, `?` show all, `⌘Z` / `Ctrl+Z` undo a delete
+- **Swipe** (touch screens): swipe a task or subtask right to tick it off, left to delete it
+- **Undo** instead of "Are you sure?": deleting shows an Undo toast for 5 seconds before anything is removed
 - Private by design: Row Level Security makes sure each user only ever sees their own rows
 
 ## Using the views
@@ -156,7 +158,6 @@ Without your own domain, Resend sends from `onboarding@resend.dev` and only deli
 
 - **Recurring tasks** (every Monday, monthly): very useful, but needs scheduling logic
 - **Drag & drop** to reorder tasks and subtasks
-- **Undo** after deleting, via a short "Deleted. Undo" toast
 - **Manual light/dark toggle**: the app already follows your system setting
 
 ## Known limitations

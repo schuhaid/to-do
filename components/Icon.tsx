@@ -26,6 +26,7 @@ const PATHS = {
   lock: "M6 11h12v9H6zM8.5 11V8a3.5 3.5 0 0 1 7 0v3",
   message: "M4 5h16v11H9l-5 4zM8 9.5h8M8 12.5h5",
   send: "M4 12l16-8-6 16-2.5-6.5z",
+  rotate: "M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4.5v3.5H8",
 } as const;
 
 export type IconName = keyof typeof PATHS;

@@ -38,7 +38,7 @@ export default function SubtaskList({
   return (
     <div>
       {items.length > 0 ? (
-        <ul className="divide-y divide-line border-b border-line">
+        <ul className="border-b border-line">
           {items.map((s, i) => (
             <SubtaskItem
               key={s.id}

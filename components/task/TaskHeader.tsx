@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { deleteTodo, renameTodo, setTodoDone } from "@/app/todos/actions";
 import Checkbox from "@/components/Checkbox";
 import Icon from "@/components/Icon";
+import { useUndo } from "@/components/Undo";
 
 export default function TaskHeader({ id, title, done }: { id: string; title: string; done: boolean }) {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function TaskHeader({ id, title, done }: { id: string; title: str
   const [optimisticTitle, setOptimisticTitle] = useOptimistic(title);
   const [editing, setEditing] = useState(false);
   const [pending, startTransition] = useTransition();
+  const { remove: removeWithUndo } = useUndo();
 
   function save(formData: FormData) {
     const next = String(formData.get("title") ?? "").trim();
@@ -23,11 +25,10 @@ export default function TaskHeader({ id, title, done }: { id: string; title: str
     });
   }
 
+  // No "are you sure?": the list shows an Undo toast for a few seconds instead.
   function remove() {
-    startTransition(async () => {
-      await deleteTodo(id);
-      router.push("/todos");
-    });
+    removeWithUndo(id, `Deleted “${optimisticTitle}”`, () => deleteTodo(id));
+    router.push("/todos");
   }
 
   return (
