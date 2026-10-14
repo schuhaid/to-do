@@ -70,7 +70,7 @@ export default function KeyboardShortcuts() {
       <button
         type="button"
         onClick={() => dialogRef.current?.showModal()}
-        className="flex min-h-11 w-full items-center gap-3 rounded-[10px] px-3 text-[15px] font-semibold text-muted transition-colors duration-150 hover:bg-hover hover:text-ink"
+        className="press flex min-h-11 w-full items-center gap-3 rounded-[10px] px-3 text-[0.9375rem] font-semibold text-muted hover:bg-hover hover:text-ink active:bg-sunken"
         title="Keyboard shortcuts (?)"
       >
         <Icon name="keyboard" className="size-5" />
@@ -81,7 +81,7 @@ export default function KeyboardShortcuts() {
         ref={dialogRef}
         onClick={(e) => e.target === dialogRef.current && dialogRef.current?.close()}
         aria-labelledby="shortcuts-title"
-        className="panel m-auto w-full max-w-sm p-0 text-ink backdrop:bg-[var(--overlay)]"
+        className="sheet max-w-sm origin-bottom-left"
       >
         <div className="p-6">
           <div className="mb-4 flex items-center justify-between">
@@ -89,7 +89,7 @@ export default function KeyboardShortcuts() {
             <button
               type="button"
               onClick={() => dialogRef.current?.close()}
-              className="grid size-9 place-items-center rounded-lg text-muted hover:bg-hover hover:text-ink"
+              className="press grid size-9 place-items-center rounded-full bg-sunken text-muted hover:text-ink"
               aria-label="Close"
             >
               <Icon name="x" className="size-[18px]" />

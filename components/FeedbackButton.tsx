@@ -3,6 +3,7 @@
 import { useActionState, useId, useRef, useState } from "react";
 import { sendFeedback, type FeedbackState } from "@/app/feedback/actions";
 import Icon from "./Icon";
+import { useSheetDrag } from "./useSheetDrag";
 
 /** "sidebar": full-width nav item (desktop). "compact": small button for the phone top bar. */
 export default function FeedbackButton({ variant = "sidebar" }: { variant?: "sidebar" | "compact" }) {
@@ -10,6 +11,7 @@ export default function FeedbackButton({ variant = "sidebar" }: { variant?: "sid
   // A new key each time the dialog opens gives a fresh, empty form.
   const [session, setSession] = useState(0);
   const titleId = useId();
+  const drag = useSheetDrag(dialogRef);
 
   return (
     <>
@@ -21,21 +23,25 @@ export default function FeedbackButton({ variant = "sidebar" }: { variant?: "sid
         }}
         className={
           variant === "sidebar"
-            ? "flex min-h-11 w-full items-center gap-3 rounded-[10px] px-3 text-[15px] font-semibold text-muted transition-colors duration-150 hover:bg-hover hover:text-ink"
-            : "btn-quiet min-h-11"
+            ? "press flex min-h-11 w-full items-center gap-3 rounded-[10px] px-3 text-[0.9375rem] font-semibold text-muted hover:bg-hover hover:text-ink active:bg-sunken"
+            : "press grid size-11 place-items-center rounded-full text-accent hover:bg-hover active:bg-sunken"
         }
+        aria-label={variant === "compact" ? "Send feedback" : undefined}
         title="Send feedback to the developer"
       >
-        <Icon name="message" className={variant === "sidebar" ? "size-5" : "size-[18px]"} />
-        {variant === "sidebar" ? <span className="flex-1 text-left">Feedback</span> : "Feedback"}
+        <Icon name="message" className={variant === "sidebar" ? "size-5" : "size-[22px]"} />
+        {variant === "sidebar" && <span className="flex-1 text-left">Feedback</span>}
       </button>
 
       <dialog
         ref={dialogRef}
         aria-labelledby={titleId}
         onClick={(e) => e.target === dialogRef.current && dialogRef.current?.close()}
-        className="panel m-auto w-[calc(100%-2rem)] max-w-md p-0 text-ink backdrop:bg-[var(--overlay)]"
+        className="sheet max-w-md sm:origin-bottom-left"
       >
+        <div {...drag} className="touch-none sm:hidden" aria-hidden="true">
+          <div className="grabber" />
+        </div>
         <FeedbackForm key={session} titleId={titleId} onClose={() => dialogRef.current?.close()} />
       </dialog>
     </>
@@ -59,7 +65,7 @@ function FeedbackForm({ titleId, onClose }: { titleId: string; onClose: () => vo
       </button>
     </div>
   ) : (
-    <form action={action} className="space-y-4 p-6">
+    <form action={action} className="space-y-4 p-6 pt-3 sm:pt-6">
       <div>
         <h2 id={titleId} className="text-lg font-bold tracking-tight">Send feedback</h2>
         <p className="text-sm text-muted">Found a bug or have an idea? It goes straight to the developer.</p>

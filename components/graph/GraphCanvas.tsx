@@ -24,6 +24,7 @@ function readColors() {
     ink: v("--ink"),
     muted: v("--muted"),
     line: v("--line"),
+    font: getComputedStyle(document.body).fontFamily || "system-ui, sans-serif",
   };
 }
 
@@ -134,7 +135,7 @@ export default function GraphCanvas({
     dim: boolean,
   ) {
     const fontSize = (strong ? 12.5 : 11) / scale;
-    ctx.font = `${strong ? 600 : 500} ${fontSize}px "Plus Jakarta Sans Variable", system-ui, sans-serif`;
+    ctx.font = `${strong ? 600 : 500} ${fontSize}px ${colors.font}`;
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
     const t = text.length > 42 ? `${text.slice(0, 41)}…` : text;
@@ -210,7 +211,7 @@ export default function GraphCanvas({
             n.__h = 6;
           } else {
             const fs = 10.5 / scale;
-            ctx.font = `600 ${fs}px "Plus Jakarta Sans Variable", system-ui, sans-serif`;
+            ctx.font = `600 ${fs}px ${colors.font}`;
             const w = ctx.measureText(n.label).width + 12 / scale;
             const h = fs + 8 / scale;
             n.__w = w;

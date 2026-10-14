@@ -7,6 +7,8 @@ import Checkbox from "@/components/Checkbox";
 import { DueBadge } from "@/components/Badges";
 import { IconButton } from "@/components/TodoItem";
 import Note from "./Note";
+import SwipeRow from "@/components/SwipeRow";
+import { useUndo } from "@/components/Undo";
 
 export default function SubtaskItem({
   subtask,
@@ -25,6 +27,7 @@ export default function SubtaskItem({
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [pending, startTransition] = useTransition();
+  const { hidden, remove } = useUndo();
 
   function save(patch: Partial<Pick<Subtask, "title" | "done" | "note" | "due_date">>) {
     startTransition(async () => {
@@ -40,10 +43,19 @@ export default function SubtaskItem({
   }
 
   const detailsId = `subtask-${s.id}-details`;
+  const del = () => remove(`sub:${s.id}`, `Deleted “${s.title}”`, () => deleteSubtask(s.id));
+
+  if (hidden.has(`sub:${s.id}`)) return null;
 
   return (
-    <li className={pending ? "opacity-70" : ""}>
-      <div className="group flex items-start gap-3 px-5 py-2.5 transition-colors duration-150 hover:bg-hover sm:px-6">
+    <SwipeRow
+      right={s.done ? { label: "Reopen", icon: "rotate", tone: "accent" } : { label: "Done", icon: "check", tone: "accent" }}
+      left={{ label: "Delete", icon: "trash", tone: "danger" }}
+      onRight={() => save({ done: !s.done })}
+      onLeft={del}
+      className={`after:pointer-events-none after:absolute after:bottom-0 after:left-[3.3rem] after:right-0 after:h-px after:bg-line last:after:hidden sm:after:left-[3.6rem] ${pending ? "opacity-70" : ""}`}
+    >
+      <div className="group flex items-start gap-3 px-5 py-1.5 transition-colors duration-150 hover:bg-hover sm:px-6">
         <div className="pt-[11px]">
           <Checkbox small checked={s.done} label={s.title} onToggle={() => save({ done: !s.done })} />
         </div>
@@ -123,7 +135,7 @@ export default function SubtaskItem({
             <button type="button" onClick={() => setEditing(true)} className="btn-quiet">Rename</button>
             <button
               type="button"
-              onClick={() => startTransition(() => deleteSubtask(s.id))}
+              onClick={del}
               className="btn-quiet hover:bg-danger-soft! hover:text-danger!"
             >
               Delete
@@ -131,6 +143,6 @@ export default function SubtaskItem({
           </div>
         </div>
       )}
-    </li>
+    </SwipeRow>
   );
 }

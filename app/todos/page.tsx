@@ -59,11 +59,16 @@ export default async function TodosPage({ searchParams }: PageProps<"/todos">) {
       </div>
 
       {visible.length > 0 ? (
-        <ul className="panel divide-y divide-line overflow-hidden">
-          {visible.map((todo, i) => (
-            <TodoItem key={todo.id} todo={todo} today={today} query={query} index={i} />
-          ))}
-        </ul>
+        <>
+          <ul className="panel overflow-hidden">
+            {visible.map((todo, i) => (
+              <TodoItem key={todo.id} todo={todo} today={today} query={query} index={i} />
+            ))}
+          </ul>
+          <p className="mt-3 hidden text-center text-xs text-muted pointer-coarse:block">
+            Swipe a task right to tick it off, left to delete it.
+          </p>
+        </>
       ) : (
         <div className="panel flex flex-col items-center px-6 py-16 text-center">
           <span className="mb-4 grid size-12 place-items-center rounded-2xl bg-accent-soft text-accent" aria-hidden="true">

@@ -7,6 +7,8 @@ import { listHref, type ListQuery } from "@/lib/list-query";
 import { deleteTodo, renameTodo, setTodoDone } from "@/app/todos/actions";
 import { DueBadge, PriorityBadge, ProgressBadge, TagChip } from "./Badges";
 import Checkbox from "./Checkbox";
+import SwipeRow from "./SwipeRow";
+import { useUndo } from "./Undo";
 
 export default function TodoItem({
   todo,
@@ -23,6 +25,7 @@ export default function TodoItem({
   const [title, setOptimisticTitle] = useOptimistic(todo.title);
   const [editing, setEditing] = useState(false);
   const [pending, startTransition] = useTransition();
+  const { hidden, remove } = useUndo();
 
   const subDone = todo.subtasks.filter((s) => s.done).length;
   const hasMeta = todo.due_date || todo.priority || todo.tags.length || todo.subtasks.length;
@@ -44,10 +47,23 @@ export default function TodoItem({
     });
   }
 
+  function del() {
+    remove(todo.id, `Deleted “${title}”`, () => deleteTodo(todo.id));
+  }
+
+  if (hidden.has(todo.id)) return null;
+
   return (
-    <li
+    <SwipeRow
+      right={done ? { label: "Reopen", icon: "rotate", tone: "accent" } : { label: "Done", icon: "check", tone: "accent" }}
+      left={{ label: "Delete", icon: "trash", tone: "danger" }}
+      onRight={toggle}
+      onLeft={del}
       style={{ animationDelay: `${Math.min(index * 25, 250)}ms` }}
-      className={`rise group relative flex items-start gap-3.5 px-4 py-3.5 transition-colors duration-150 hover:bg-hover sm:px-5 ${
+      className="rise after:pointer-events-none after:absolute after:bottom-0 after:left-[3.6rem] after:right-0 after:h-px after:bg-line last:after:hidden sm:after:left-[4.1rem]"
+    >
+    <div
+      className={`group relative flex items-start gap-3.5 px-4 py-3.5 transition-colors duration-150 hover:bg-hover active:bg-hover sm:px-5 ${
         pending ? "opacity-60" : ""
       }`}
     >
@@ -98,17 +114,18 @@ export default function TodoItem({
               </div>
             ) : null}
           </div>
-          <div className="-my-1 flex shrink-0 gap-0.5 text-muted sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+          <div className="-my-1 flex shrink-0 gap-0.5 text-muted pointer-coarse:hidden sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
             <IconButton label={`Rename "${title}"`} onClick={() => setEditing(true)}>
               <path d="M10.8 2.7l2.5 2.5-7.6 7.6-3.2.7.7-3.2 7.6-7.6z" />
             </IconButton>
-            <IconButton label={`Delete "${title}"`} onClick={() => startTransition(() => deleteTodo(todo.id))} danger>
+            <IconButton label={`Delete "${title}"`} onClick={del} danger>
               <path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.5h5.8l.6-8.5" />
             </IconButton>
           </div>
         </>
       )}
-    </li>
+    </div>
+    </SwipeRow>
   );
 }
 
@@ -132,7 +149,7 @@ export function IconButton({
       disabled={disabled}
       aria-label={label}
       title={label}
-      className={`grid size-10 place-items-center rounded-lg transition-colors duration-150 hover:bg-panel hover:ring-1 hover:ring-line disabled:pointer-events-none disabled:opacity-30 ${
+      className={`press grid size-10 place-items-center rounded-lg hover:bg-panel hover:ring-1 hover:ring-line disabled:pointer-events-none disabled:opacity-30 ${
         danger ? "hover:text-danger" : "hover:text-ink"
       }`}
     >
