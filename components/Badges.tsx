@@ -1,19 +1,15 @@
 import Link from "next/link";
 import { dueStatus, formatDue, formatShortDate, todayISO } from "@/lib/dates";
 import { PRIORITY_LABELS, type Priority } from "@/lib/types";
-import Icon from "./Icon";
 
-// Meta items under a task: plain muted text with a small icon. Colour is kept
-// for the two states that need action: overdue (red) and due today (accent).
-// The words always say the state too, so colour is never the only signal.
-
-const dueTone = {
-  overdue: "text-danger",
-  today: "text-accent font-medium",
-  soon: "text-muted",
-  later: "text-muted",
+const dueStyles = {
+  overdue: "bg-danger-soft text-danger",
+  today: "bg-warn-soft text-warn",
+  soon: "bg-accent-soft text-accent",
+  later: "bg-sunken text-muted",
 } as const;
 
+/** Due date pill, colored by urgency. Text always says the state, not just color. */
 export function DueBadge({
   due,
   done,
@@ -25,30 +21,29 @@ export function DueBadge({
 }) {
   if (!due) return null;
   const status = dueStatus(due, done, today);
-  const tone = status ? dueTone[status] : "text-faint";
+  const style = status ? dueStyles[status] : "bg-sunken text-faint";
   return (
-    <span className={`inline-flex items-center gap-1 text-[0.8125rem] ${tone}`}>
-      <Icon name="calendar" className="size-3.5" />
+    <span className={`chip ${style}`}>
+      <svg viewBox="0 0 16 16" className="size-3" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+        <rect x="2.5" y="3.5" width="11" height="10" rx="2" />
+        <path d="M2.5 7h11M5.5 2v3M10.5 2v3" strokeLinecap="round" />
+      </svg>
       {done ? formatShortDate(due) : formatDue(due, today)}
     </span>
   );
 }
 
-/** Only medium and high are shown in lists; low priority isn't worth the noise. */
+/** Signal-bar icon + word. Neutral ink so it never competes with due-date colors. */
 export function PriorityBadge({ priority }: { priority: Priority }) {
-  if (priority < 2) return null;
+  if (!priority) return null;
   return (
-    <span
-      className={`inline-flex items-center gap-1 text-[0.8125rem] ${priority === 3 ? "font-medium text-ink" : "text-muted"}`}
-      title={`${PRIORITY_LABELS[priority]} priority`}
-    >
-      <Icon name="flag" className="size-3.5" />
+    <span className="inline-flex items-center gap-1 text-xs font-semibold text-muted" title={`${PRIORITY_LABELS[priority]} priority`}>
+      <PriorityIcon priority={priority} />
       {PRIORITY_LABELS[priority]}
     </span>
   );
 }
 
-/** Three bars, filled up to the priority. Used in the priority picker. */
 export function PriorityIcon({ priority }: { priority: Priority }) {
   return (
     <svg viewBox="0 0 12 12" className="size-3" aria-hidden="true">
@@ -57,10 +52,10 @@ export function PriorityIcon({ priority }: { priority: Priority }) {
           key={i}
           x={1 + i * 3.8}
           y={8 - i * 3}
-          width="2.4"
+          width="2.6"
           height={3 + i * 3}
-          rx="0.8"
-          className={i < priority ? "fill-current" : "fill-current opacity-20"}
+          rx="1"
+          className={i < priority ? (priority === 3 ? "fill-warn" : "fill-ink") : "fill-faint opacity-35"}
         />
       ))}
     </svg>
@@ -71,19 +66,19 @@ export function ProgressBadge({ done, total }: { done: number; total: number }) 
   if (total === 0) return null;
   const complete = done === total;
   return (
-    <span className={`inline-flex items-center gap-1 text-[0.8125rem] tabular-nums ${complete ? "text-accent" : "text-muted"}`}>
-      <Icon name="list" className="size-3.5" />
-      {done}/{total}
+    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold tabular-nums ${complete ? "text-accent" : "text-muted"}`}>
+      <span className="relative h-1.5 w-10 overflow-hidden rounded-full bg-line" aria-hidden="true">
+        <span className="absolute inset-y-0 left-0 rounded-full bg-accent" style={{ width: `${(done / total) * 100}%` }} />
+      </span>
+      {done}/{total} done
     </span>
   );
 }
 
 export function TagChip({ tag, href }: { tag: string; href?: string }) {
-  const cls = "text-[0.8125rem] text-muted";
+  const cls = "chip bg-accent-soft/60 text-accent";
   return href ? (
-    <Link href={href} className={`${cls} hover:text-ink hover:underline hover:underline-offset-2`}>
-      #{tag}
-    </Link>
+    <Link href={href} className={`${cls} hover:bg-accent hover:text-accent-ink`}>#{tag}</Link>
   ) : (
     <span className={cls}>#{tag}</span>
   );

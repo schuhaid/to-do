@@ -13,16 +13,14 @@ function readColors() {
   const css = getComputedStyle(document.documentElement);
   const v = (name: string) => css.getPropertyValue(name).trim();
   return {
-    // Grey for open work; the accent for today and progress; red only for overdue.
-    open: v("--muted"),
+    open: v("--open"),
     done: v("--faint"),
-    progress: v("--accent"),
+    progress: v("--done"),
     overdue: v("--danger"),
-    today: v("--accent"),
-    tag: v("--muted"),
-    tagFill: v("--side"),
-    tagLine: v("--line-strong"),
-    panel: v("--paper"),
+    today: v("--warn"),
+    accent: v("--accent"),
+    accentSoft: v("--accent-soft"),
+    panel: v("--panel"),
     ink: v("--ink"),
     muted: v("--muted"),
     line: v("--line"),
@@ -164,17 +162,24 @@ export default function GraphCanvas({
           firstFit.current = false;
         }
       }}
-      // Links: soft curves tinted by the task's status.
+      // Links: soft curves tinted by the task's status; urgent ones carry moving dots.
       linkCurvature={(l) => (l.kind === "tag" ? 0.08 : 0.22)}
       linkColor={(l) => {
         const lit = !hover || idOf(l.source) === hover || idOf(l.target) === hover;
-        if (l.kind === "tag") return alpha(colors.tag, lit ? (hover ? 0.5 : 0.22) : 0.05);
+        if (l.kind === "tag") return alpha(colors.accent, lit ? (hover ? 0.6 : 0.3) : 0.06);
         const parent = nodeById.get(idOf(l.source));
         const base = parent ? statusColor(parent) : colors.muted;
-        return alpha(base, lit ? (hover ? 0.7 : 0.35) : 0.06);
+        return alpha(base, lit ? (hover ? 0.85 : 0.5) : 0.07);
       }}
-      linkWidth={(l) => (l.kind === "tag" ? 1 : 1.2)}
+      linkWidth={(l) => (l.kind === "tag" ? 1 : 1.6)}
       linkLineDash={(l) => (l.kind === "tag" ? [2, 3] : null)}
+      linkDirectionalParticles={(l) => (l.urgent ? 2 : 0)}
+      linkDirectionalParticleWidth={2.2}
+      linkDirectionalParticleSpeed={0.006}
+      linkDirectionalParticleColor={(l) => {
+        const parent = nodeById.get(idOf(l.source));
+        return parent?.status === "today" ? colors.today : colors.overdue;
+      }}
       nodeRelSize={1}
       nodeVal={(n) => radiusOf(n, sizeBy) ** 2}
       onNodeHover={(n) => {
@@ -200,7 +205,7 @@ export default function GraphCanvas({
           if (!showText) {
             ctx.beginPath();
             ctx.arc(x, y, 3, 0, 2 * Math.PI);
-            ctx.fillStyle = colors.tag;
+            ctx.fillStyle = colors.accent;
             ctx.fill();
             n.__w = 6;
             n.__h = 6;
@@ -213,12 +218,12 @@ export default function GraphCanvas({
             n.__h = h;
             ctx.beginPath();
             ctx.roundRect(x - w / 2, y - h / 2, w, h, h / 2);
-            ctx.fillStyle = colors.tagFill;
+            ctx.fillStyle = colors.accentSoft;
             ctx.fill();
             ctx.lineWidth = 1 / scale;
-            ctx.strokeStyle = colors.tagLine;
+            ctx.strokeStyle = alpha(colors.accent, 0.6);
             ctx.stroke();
-            ctx.fillStyle = colors.tag;
+            ctx.fillStyle = colors.accent;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillText(n.label, x, y + 0.5 / scale);
@@ -251,20 +256,36 @@ export default function GraphCanvas({
         }
 
         // ---- Task node ----
-        // Flat body.
+        const w = weightOf(n, sizeBy);
+
+        // Glow for the heaviest tasks.
+        if (w >= 0.6 && n.status !== "done") {
+          const g = ctx.createRadialGradient(x, y, r * 0.6, x, y, r * 2.6);
+          g.addColorStop(0, alpha(color, 0.38));
+          g.addColorStop(1, alpha(color, 0));
+          ctx.beginPath();
+          ctx.arc(x, y, r * 2.6, 0, 2 * Math.PI);
+          ctx.fillStyle = g;
+          ctx.fill();
+        }
+
+        // Body with a soft highlight for depth.
+        const body = ctx.createRadialGradient(x - r * 0.35, y - r * 0.4, r * 0.1, x, y, r);
+        body.addColorStop(0, alpha(color, 0.7));
+        body.addColorStop(1, color);
         ctx.beginPath();
         ctx.arc(x, y, r, 0, 2 * Math.PI);
-        ctx.fillStyle = color;
+        ctx.fillStyle = body;
         ctx.fill();
 
         // Progress ring: how many subtasks are done.
         if (n.subTotal > 0) {
           const ringR = r + 2.4;
-          ctx.lineWidth = 1.5;
+          ctx.lineWidth = 1.8;
           ctx.lineCap = "round";
           ctx.beginPath();
           ctx.arc(x, y, ringR, 0, 2 * Math.PI);
-          ctx.strokeStyle = colors.tagLine;
+          ctx.strokeStyle = alpha(colors.muted, 0.25);
           ctx.stroke();
           if (n.subDone > 0) {
             const start = -Math.PI / 2;

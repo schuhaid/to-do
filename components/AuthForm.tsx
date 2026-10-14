@@ -13,8 +13,8 @@ type Props = {
 
 const copy = {
   login: {
-    title: "Log in",
-    intro: "Use the email you signed up with.",
+    title: "Welcome back",
+    intro: "Log in to see your tasks.",
     submit: "Log in",
     pending: "Logging in…",
     switchText: "New here?",
@@ -23,7 +23,7 @@ const copy = {
     passwordAutocomplete: "current-password",
   },
   signup: {
-    title: "Create an account",
+    title: "Create your account",
     intro: "Your list is private. Only you can see it.",
     submit: "Create account",
     pending: "Creating account…",
@@ -40,10 +40,10 @@ export default function AuthForm({ mode, action, notice }: Props) {
 
   if (state?.message) {
     return (
-      <div>
+      <div className="space-y-3">
         <h1 className="page-title">Check your inbox</h1>
-        <p className="mt-2 text-muted">{state.message}</p>
-        <Link href="/login" className="btn-outline mt-8 w-full">Back to log in</Link>
+        <p className="text-muted">{state.message}</p>
+        <Link href="/login" className="btn-outline mt-4 w-full">Back to log in</Link>
       </div>
     );
   }
@@ -51,19 +51,19 @@ export default function AuthForm({ mode, action, notice }: Props) {
   const error = state?.error ?? notice;
 
   return (
-    <form action={formAction} className="space-y-4">
-      <div className="mb-8">
+    <form action={formAction} className="space-y-5">
+      <div className="mb-8 space-y-2">
         <h1 className="page-title">{t.title}</h1>
-        <p className="mt-1 text-muted">{t.intro}</p>
+        <p className="text-muted">{t.intro}</p>
       </div>
 
       <label className="block space-y-1.5">
-        <span className="meta font-medium text-ink">Email</span>
+        <span className="text-sm font-semibold">Email</span>
         <input name="email" type="email" required autoComplete="email" className="field" />
       </label>
 
       <label className="block space-y-1.5">
-        <span className="meta font-medium text-ink">Password</span>
+        <span className="text-sm font-semibold">Password</span>
         <input
           name="password"
           type="password"
@@ -73,22 +73,22 @@ export default function AuthForm({ mode, action, notice }: Props) {
           className="field"
         />
         {mode === "signup" && (
-          <span className="meta block">At least 6 characters.</span>
+          <span className="block text-sm text-muted">At least 6 characters.</span>
         )}
       </label>
 
       {error && (
-        <p role="alert" className="meta flex gap-2 text-danger">
-          <Icon name="alert" className="mt-[3px] size-3.5 shrink-0" />
+        <p role="alert" className="flex gap-2.5 rounded-[10px] border border-danger/25 bg-danger-soft px-4 py-3 text-sm font-medium text-danger">
+          <Icon name="alert" className="mt-0.5 size-4 shrink-0" />
           {error}
         </p>
       )}
 
-      <button type="submit" disabled={pending} className="btn mt-2 w-full">
+      <button type="submit" disabled={pending} className="btn w-full">
         {pending ? t.pending : t.submit}
       </button>
 
-      <p className="meta pt-4">
+      <p className="border-t border-line pt-5 text-center text-sm text-muted">
         {t.switchText}{" "}
         <Link href={t.switchHref} className="link">{t.switchLink}</Link>
       </p>

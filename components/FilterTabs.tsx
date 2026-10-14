@@ -16,7 +16,7 @@ export default function FilterTabs({
   counts: Record<Filter, number>;
 }) {
   return (
-    <nav aria-label="Filter tasks" className="tabs">
+    <nav aria-label="Filter tasks" className="segmented self-start">
       {tabs.map(({ value, label }) => {
         const active = value === query.filter;
         return (
@@ -25,10 +25,16 @@ export default function FilterTabs({
             href={listHref(query, { filter: value })}
             scroll={false}
             aria-current={active ? "page" : undefined}
-            className={`tab ${active ? "tab-on" : ""}`}
+            className={`segment px-3.5 ${active ? "segment-on" : ""}`}
           >
             {label}
-            <span className="tabular-nums text-faint">{counts[value]}</span>
+            <span
+              className={`rounded-full px-1.5 text-xs font-semibold tabular-nums ${
+                active ? "bg-accent-soft text-accent" : "text-faint"
+              }`}
+            >
+              {counts[value]}
+            </span>
           </Link>
         );
       })}

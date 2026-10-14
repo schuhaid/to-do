@@ -8,30 +8,39 @@ import FeedbackButton from "@/components/FeedbackButton";
 import MobileHeader from "@/components/MobileHeader";
 
 // Shared frame for every logged-in view.
-// Desktop: a quiet grey sidebar beside the page. Phones/tablets: top bar + bottom tab bar.
+// Desktop: fixed sidebar. Phones/tablets: slim top bar + bottom tab bar.
 // Used as the layout of /todos, /dashboard and /graph.
 export default async function AppShell({ children }: { children: React.ReactNode }) {
   const { user } = await getUser();
+  const initial = (user.email ?? "?").charAt(0).toUpperCase();
 
   return (
     <div className="flex flex-1">
-      <aside className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col bg-side px-3 py-4 lg:flex">
-        <div className="mb-6 px-2 py-1">
+      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-line bg-material-heavy px-3 py-6 lg:flex">
+        <div className="mb-8 px-3">
           <Wordmark />
         </div>
+        <p className="eyebrow mb-2 px-3">Views</p>
         <SideNav />
 
-        <div className="mt-auto space-y-0.5">
+        <div className="mt-auto space-y-1">
           <FeedbackButton />
           <KeyboardShortcuts />
-          <div className="mt-3 flex items-center gap-2">
-            <span className="meta min-w-0 flex-1 truncate px-2" title={user.email}>
+          <div className="flex items-center gap-3 rounded-[12px] bg-panel px-3 py-2.5">
+            <span className="grid size-8 shrink-0 place-items-center rounded-full bg-accent-soft text-sm font-bold text-accent" aria-hidden="true">
+              {initial}
+            </span>
+            <span className="min-w-0 flex-1 truncate text-sm text-muted" title={user.email}>
               {user.email}
             </span>
             <form action={logout}>
-              <button type="submit" className="btn-quiet" title="Log out">
-                <Icon name="logout" />
-                Log out
+              <button
+                type="submit"
+                className="press grid size-9 place-items-center rounded-full text-muted hover:bg-danger-soft hover:text-danger"
+                aria-label="Log out"
+                title="Log out"
+              >
+                <Icon name="logout" className="size-[18px]" />
               </button>
             </form>
           </div>
@@ -48,16 +57,16 @@ export default async function AppShell({ children }: { children: React.ReactNode
                   type="submit"
                   aria-label="Log out"
                   title="Log out"
-                  className="press grid size-11 place-items-center rounded-md text-muted hover:bg-hover hover:text-ink"
+                  className="press grid size-11 place-items-center rounded-full text-accent hover:bg-hover active:bg-sunken"
                 >
-                  <Icon name="logout" className="size-5" />
+                  <Icon name="logout" className="size-[22px]" />
                 </button>
               </form>
             </>
           }
         />
 
-        <div className="w-full flex-1 px-5 pb-[calc(env(safe-area-inset-bottom)+5.5rem)] pt-4 sm:px-8 lg:px-16 lg:pb-20 lg:pt-14">
+        <div className="mx-auto w-full max-w-5xl flex-1 px-4 pb-[calc(env(safe-area-inset-bottom)+6rem)] pt-2 sm:px-8 lg:px-10 lg:pb-16 lg:pt-10">
           {children}
         </div>
 

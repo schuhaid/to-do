@@ -10,11 +10,10 @@ export default function AddTodo() {
   return (
     <form
       action={addTodo}
-      className="flex flex-wrap items-center gap-2 border border-line px-2 py-1.5 transition-colors duration-150 hover:border-line-strong focus-within:border-accent sm:flex-nowrap"
-      style={{ borderRadius: "var(--radius)" }}
+      className="panel flex flex-wrap items-center gap-2 p-2 transition-colors duration-150 focus-within:border-accent focus-within:ring-3 focus-within:ring-accent-soft sm:flex-nowrap"
     >
-      <span className="hidden pl-1 text-faint sm:block" aria-hidden="true">
-        <Icon name="plus" />
+      <span className="hidden pl-2 text-accent sm:block" aria-hidden="true">
+        <Icon name="plus" className="size-5" strokeWidth={2.2} />
       </span>
       <label htmlFor="new-todo" className="sr-only">New task</label>
       <input
@@ -23,8 +22,8 @@ export default function AddTodo() {
         required
         maxLength={500}
         autoComplete="off"
-        placeholder="New task, use #tag to label it"
-        className="h-9 min-w-0 flex-1 basis-full bg-transparent px-1 text-ink outline-none placeholder:text-faint sm:basis-auto"
+        placeholder="Add a task… type #tag to label it"
+        className="min-h-11 min-w-0 flex-1 basis-full rounded-lg bg-transparent px-2 text-base text-ink outline-none placeholder:text-faint sm:basis-auto"
       />
       <label className="sr-only" htmlFor="new-todo-due">Due date (optional)</label>
       <input
@@ -32,7 +31,7 @@ export default function AddTodo() {
         name="due_date"
         type="date"
         title="Due date (optional)"
-        className="select-quiet h-9 flex-1 sm:w-36 sm:flex-none"
+        className="min-h-11 flex-1 rounded-lg border border-line bg-sunken px-3 text-sm text-muted outline-none transition-colors hover:border-line-strong focus:border-accent sm:w-40 sm:flex-none"
       />
       <AddButton />
     </form>
@@ -42,8 +41,8 @@ export default function AddTodo() {
 function AddButton() {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={pending} className="btn btn-sm h-9 shrink-0">
-      {pending ? "Adding…" : "Add"}
+    <button type="submit" disabled={pending} className="btn shrink-0 px-5">
+      {pending ? "Adding…" : "Add task"}
     </button>
   );
 }
