@@ -9,13 +9,15 @@ import type { Subtask, Todo, TodoWithSubtasks } from "@/lib/types";
 
 const TODO_COLUMNS = "id, title, done, created_at, completed_at, due_date, priority, tags";
 
+// getClaims() checks the session token's signature locally instead of asking
+// the Auth server, which saves a network round trip on every request.
+// RLS still checks the same token in the database on every query.
 export const getUser = cache(async () => {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-  return { supabase, user };
+  const { data } = await supabase.auth.getClaims();
+  const claims = data?.claims;
+  if (!claims?.sub) redirect("/login");
+  return { supabase, user: { id: claims.sub, email: claims.email } };
 });
 
 export async function getTodosWithSubtasks(): Promise<TodoWithSubtasks[]> {
