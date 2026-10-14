@@ -1,6 +1,9 @@
 "use client";
 
-/** Round checkbox that fills with the accent and draws its tick. */
+/**
+ * The tick box. 18px to look at, 40px to hit: the invisible padding around it
+ * is part of the button, so it's easy to tap without making the row louder.
+ */
 export default function Checkbox({
   checked,
   onToggle,
@@ -19,11 +22,13 @@ export default function Checkbox({
       aria-checked={checked}
       aria-label={checked ? `Mark "${label}" as open` : `Mark "${label}" as done`}
       onClick={onToggle}
-      className={`check ${checked ? "check-on" : ""} ${small ? "size-[20px]!" : ""}`}
+      className="group/check -m-[11px] grid size-10 shrink-0 place-items-center rounded-md"
     >
-      <svg viewBox="0 0 12 12" aria-hidden="true">
-        <path d="M2.5 6.3l2.3 2.3 4.7-5" />
-      </svg>
+      <span className={`check ${checked ? "check-on" : ""} ${small ? "size-4! rounded-[4px]!" : ""} group-hover/check:border-accent`}>
+        <svg viewBox="0 0 12 12" aria-hidden="true">
+          <path d="M2.4 6.5l2.5 2.6 4.9-6.2" />
+        </svg>
+      </span>
     </button>
   );
 }

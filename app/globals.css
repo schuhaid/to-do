@@ -1,123 +1,118 @@
 @import "tailwindcss";
 
 /*
-  Ticked design system — Apple-style.
-  System font with size-specific tracking, iOS grouped neutrals, one teal
-  action color, amber for "today". Chrome is translucent material that
-  content scrolls under; cards stay solid. Every text color meets WCAG AA
-  (4.5:1) on --panel and --bg except --faint, which is only used for
-  finished items and decoration.
+  Ticked — design tokens. Every colour, size and radius the app uses lives here.
+
+  Idea: a calm sheet of paper and one green-ink tick. Everything is greyscale;
+  the accent appears only where something is done, in progress, or the primary
+  action. Red appears only for "overdue" and "delete".
+
+  Contrast (WCAG AA 4.5:1 on --paper and --side): ink, muted, accent, danger.
+  --faint (3:1) is only used for finished items, placeholders and decoration.
 */
 :root {
-  --bg: #f2f2f7;
-  --panel: #ffffff;
-  --sunken: #ebebf0;
-  --ink: #1c1c1e;
-  --muted: #636366;
-  --faint: #8e8e93;
-  --line: #e5e5ea;
-  --line-strong: #d1d1d6;
-  --hover: #f5f5f8;
-  --accent: #0f766e;
-  --accent-hover: #0d655e;
-  --accent-ink: #ffffff;
-  --accent-soft: #dcf0ec;
-  --danger: #d70015;
-  --danger-soft: #ffeceb;
-  --warn: #b45309;
-  --warn-soft: #fef3c7;
-  --open: #0a63d6;
-  --done: #0f766e;
-  --overlay: rgb(0 0 0 / 0.28);
-  --radius: 14px;
-  --segment-on: #ffffff;
+  /* Surfaces */
+  --paper: #ffffff; /* content */
+  --side: #f6f6f5; /* sidebar, sunken controls */
+  --hover: #f1f1f0; /* row / control hover */
+  --line: #e6e6e4; /* 1px borders */
+  --line-strong: #d4d4d2; /* inputs, checkbox outline */
 
-  /* Materials: light chrome over content, heavier for structure. */
-  --material: rgb(249 249 251 / 0.72);
-  --material-solid: #f9f9fb;
-  --material-heavy: #ebebf0;
-  --material-edge: rgb(255 255 255 / 0.6);
-  --material-line: rgb(60 60 67 / 0.14);
-  --shadow-float: 0 1px 1px rgb(0 0 0 / 0.04), 0 8px 28px -6px rgb(0 0 0 / 0.18);
+  /* Text */
+  --ink: #1a1a1a;
+  --muted: #646464;
+  --faint: #8f8f8f;
 
-  --font-ui: -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI Variable Text", "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  /* The one accent: green ink */
+  --accent: #1e7550;
+  --accent-hover: #186343;
+  --accent-ink: #ffffff; /* text on accent */
+  --accent-wash: #e9f3ee; /* selected / progress track tint */
+
+  /* Meaning, used sparingly */
+  --danger: #c4362f;
+  --danger-wash: #fbeceb;
+
+  --overlay: rgb(0 0 0 / 0.32);
+  --shadow-overlay: 0 12px 32px -8px rgb(0 0 0 / 0.18), 0 0 0 1px rgb(0 0 0 / 0.04);
+
+  /* Shape */
+  --radius: 6px; /* every control */
+  --radius-overlay: 10px; /* dialogs, toasts */
+
+  /* Type: one family, five sizes */
+  --font-ui: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --text-meta: 0.8125rem; /* 13px — meta lines, labels */
+  --text-small: 0.75rem; /* 12px — chart axes, kbd */
+  --text-body: 0.9375rem; /* 15px — rows, inputs */
+  --text-title: 1.375rem; /* 22px — page and task titles */
+  --text-figure: 2rem; /* 32px — dashboard figures */
+
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #000000;
-    --panel: #1c1c1e;
-    --sunken: #2c2c2e;
-    --ink: #f2f2f7;
-    --muted: #aeaeb2;
-    --faint: #76767c;
-    --line: #38383a;
-    --line-strong: #48484a;
-    --hover: #2c2c2e;
-    --accent: #2dd4bf;
-    --accent-hover: #5eead4;
-    --accent-ink: #032420;
-    --accent-soft: #10332f;
-    --danger: #ff6961;
-    --danger-soft: #3a1d1b;
-    --warn: #fbbf24;
-    --warn-soft: #33290f;
-    --open: #64a8ff;
-    --done: #2dd4bf;
-    --overlay: rgb(0 0 0 / 0.5);
-    --segment-on: #636366;
+    --paper: #191919;
+    --side: #202020;
+    --hover: #262626;
+    --line: #2d2d2d;
+    --line-strong: #3d3d3d;
 
-    --material: rgb(30 30 32 / 0.72);
-    --material-solid: #1e1e20;
-    --material-heavy: #121214;
-    --material-edge: rgb(255 255 255 / 0.07);
-    --material-line: rgb(84 84 88 / 0.6);
-    --shadow-float: 0 1px 1px rgb(0 0 0 / 0.3), 0 10px 32px -6px rgb(0 0 0 / 0.7);
+    --ink: #ededed;
+    --muted: #a1a1a1;
+    --faint: #6b6b6b;
+
+    --accent: #5dbb8f;
+    --accent-hover: #73c9a0;
+    --accent-ink: #0f1f17;
+    --accent-wash: #1d2a23;
+
+    --danger: #f2726a;
+    --danger-wash: #2e1c1a;
+
+    --overlay: rgb(0 0 0 / 0.55);
+    --shadow-overlay: 0 16px 40px -8px rgb(0 0 0 / 0.6), 0 0 0 1px rgb(255 255 255 / 0.06);
     color-scheme: dark;
   }
 }
 
-/* More contrast: solid surfaces, defined borders. */
 @media (prefers-contrast: more) {
   :root {
     --line: var(--line-strong);
-    --material: var(--material-solid);
-    --material-line: var(--muted);
     --faint: var(--muted);
   }
 }
 
-/* Less transparency: frosted chrome becomes solid. */
-@media (prefers-reduced-transparency: reduce) {
-  :root {
-    --material: var(--material-solid);
-  }
-}
-
 @theme inline {
-  --color-bg: var(--bg);
-  --color-panel: var(--panel);
-  --color-sunken: var(--sunken);
+  --color-paper: var(--paper);
+  --color-side: var(--side);
+  --color-hover: var(--hover);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-faint: var(--faint);
-  --color-line: var(--line);
-  --color-line-strong: var(--line-strong);
-  --color-hover: var(--hover);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-ink: var(--accent-ink);
-  --color-accent-soft: var(--accent-soft);
+  --color-accent-wash: var(--accent-wash);
   --color-danger: var(--danger);
-  --color-danger-soft: var(--danger-soft);
-  --color-warn: var(--warn);
-  --color-warn-soft: var(--warn-soft);
-  --color-open: var(--open);
-  --color-done: var(--done);
-  --color-material-heavy: var(--material-heavy);
+  --color-danger-wash: var(--danger-wash);
+
+  /* Legacy names some components still use. */
+  --color-panel: var(--paper);
+  --color-bg: var(--paper);
+  --color-sunken: var(--side);
+
   --font-sans: var(--font-ui);
+  --text-meta: var(--text-meta);
+  --text-small: var(--text-small);
+  --text-body: var(--text-body);
+  --text-title: var(--text-title);
+  --text-figure: var(--text-figure);
+  --radius-ui: var(--radius);
+  --radius-overlay: var(--radius-overlay);
 }
 
 html {
@@ -125,26 +120,24 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Body: system font at the user's chosen size, comfortable leading, near-zero tracking. */
 body {
-  background: var(--bg);
+  background: var(--paper);
   color: var(--ink);
-  font: 100%/1.5 var(--font-ui);
-  font-optical-sizing: auto;
-  letter-spacing: -0.006em;
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  line-height: 1.55;
+  font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
 }
 
-/* Small text gets a touch of positive tracking for legibility. */
-.text-xs,
-.text-\[11px\],
-.text-\[12px\] {
-  letter-spacing: 0.008em;
+::selection {
+  background: var(--accent-wash);
 }
 
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+  border-radius: 4px;
 }
 
 button:not(:disabled),
@@ -155,123 +148,144 @@ label:has(> input[type="checkbox"]) {
   cursor: pointer;
 }
 
-/*
-  Press feedback lives on pointer-down and is instant; release eases back.
-  Applied to every tappable control.
-*/
+/* Press feedback: tiny and instant, only on real controls. */
 @utility press {
-  transition-property: transform, background-color, color, border-color, opacity, box-shadow;
-  transition-duration: 220ms;
-  transition-timing-function: cubic-bezier(0.25, 0.9, 0.3, 1);
+  transition-property: background-color, color, border-color, opacity, transform;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
   &:active:not(:disabled) {
-    transform: scale(0.96);
-    transition-duration: 80ms;
+    transform: scale(0.98);
+    transition-duration: 60ms;
   }
 }
 
 @layer components {
+  /* A plain 1px frame; used for inputs and the rare grouped block, never as decoration. */
   .panel {
-    @apply border border-line bg-panel;
+    border: 1px solid var(--line); /* taste-skill-ignore: input frames only */
     border-radius: var(--radius);
+    background: var(--paper);
   }
 
-  /* Translucent chrome. Content scrolls underneath; the bright edge is light catching the material. */
-  .material {
-    background: var(--material);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    backdrop-filter: blur(20px) saturate(180%);
-  }
-  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .material {
-      background: var(--material-solid);
-    }
-  }
-  @media (prefers-reduced-transparency: reduce) {
-    .material {
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-    }
-  }
-
-  .eyebrow {
-    @apply text-[0.75rem] font-semibold uppercase text-muted;
-    letter-spacing: 0.06em;
-  }
-
-  /* Large title: tight leading and negative tracking as the size grows. */
+  /* Page and task titles: weight and size, no colour. */
   .page-title {
-    font-size: clamp(1.75rem, 1.35rem + 1.6vw, 2.125rem);
-    line-height: 1.12;
-    letter-spacing: -0.022em;
-    @apply font-bold;
+    font-size: var(--text-title);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    font-weight: 600;
+  }
+
+  /* Muted supporting line under or beside a title. */
+  .meta {
+    font-size: var(--text-meta);
+    color: var(--muted);
+  }
+
+  /* Section heading inside a page (Subtasks, Deadlines …): sentence case, same ink. */
+  .section-title {
+    font-size: var(--text-body);
+    font-weight: 600;
+    letter-spacing: -0.005em;
   }
 
   .field {
-    @apply block w-full rounded-[10px] border border-line-strong bg-panel px-3.5 py-2.5 text-base text-ink placeholder:text-faint;
-    transition: border-color 150ms, box-shadow 150ms;
+    @apply block w-full border border-line-strong bg-paper px-3 py-2 text-ink placeholder:text-faint;
+    font-size: var(--text-body);
+    border-radius: var(--radius);
+    transition: border-color 150ms;
   }
   .field:hover {
     border-color: var(--faint);
   }
   .field:focus {
-    @apply outline-none;
+    outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
   }
 
   .btn {
-    @apply press inline-flex min-h-11 items-center justify-center gap-2 rounded-[12px] bg-accent px-5 text-[0.9375rem] font-semibold text-accent-ink hover:bg-accent-hover disabled:opacity-50;
+    @apply press inline-flex min-h-10 items-center justify-center gap-2 bg-accent px-4 font-medium text-accent-ink hover:bg-accent-hover disabled:opacity-50;
+    font-size: var(--text-body);
+    border-radius: var(--radius);
   }
   .btn-sm {
-    @apply min-h-9 rounded-[10px] px-3.5 text-sm;
+    @apply min-h-8 px-3;
+    font-size: var(--text-meta);
   }
   .btn-outline {
-    @apply press inline-flex min-h-11 items-center justify-center gap-2 rounded-[12px] border border-line-strong bg-panel px-4 text-[0.9375rem] font-semibold text-ink hover:bg-hover;
+    @apply press inline-flex min-h-10 items-center justify-center gap-2 border border-line-strong bg-paper px-3.5 font-medium text-ink hover:bg-hover;
+    font-size: var(--text-body);
+    border-radius: var(--radius);
   }
   .btn-quiet {
-    @apply press inline-flex min-h-9 items-center gap-1.5 rounded-[10px] px-3 text-sm font-medium text-muted hover:bg-hover hover:text-ink active:bg-sunken;
+    @apply press inline-flex min-h-8 items-center gap-1.5 px-2.5 font-medium text-muted hover:bg-hover hover:text-ink;
+    font-size: var(--text-meta);
+    border-radius: var(--radius);
   }
   .link {
-    @apply font-semibold text-accent underline-offset-4 hover:underline;
+    @apply font-medium text-accent underline-offset-4 hover:underline;
   }
 
-  /* iOS-style segmented control: sunken track, raised selected pill. */
+  /* Text tabs: the selected one is ink with an underline, the rest muted. */
+  .tabs {
+    @apply flex items-center gap-5;
+  }
+  .tab {
+    @apply relative inline-flex min-h-9 items-center gap-1.5 font-medium text-muted transition-colors duration-150 hover:text-ink;
+    font-size: var(--text-meta);
+  }
+  .tab-on {
+    @apply text-ink;
+  }
+  .tab-on::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--ink);
+  }
+
+  /* Small segmented choice (priority, graph sizing). */
   .segmented {
-    @apply inline-flex rounded-[10px] bg-sunken p-[3px];
+    @apply inline-flex border border-line p-0.5;
+    border-radius: var(--radius);
+    background: var(--side);
   }
   .segment {
-    @apply press inline-flex min-h-8 items-center gap-1.5 rounded-[8px] px-3 text-sm font-medium text-muted hover:text-ink;
+    @apply press inline-flex min-h-7 items-center justify-center gap-1.5 px-2.5 font-medium text-muted hover:text-ink;
+    font-size: var(--text-meta);
+    border-radius: calc(var(--radius) - 2px);
   }
   .segment-on {
-    @apply font-semibold text-ink;
-    background: var(--segment-on);
-    box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 0 0 0.5px rgb(0 0 0 / 0.04);
+    @apply bg-paper text-ink;
+    box-shadow: 0 0 0 1px var(--line); /* taste-skill-ignore: a 1px ring, not a shadow */
   }
 
-  /* Round checkbox, as in Reminders. Shrinks on press, fills and draws its tick. */
+  /*
+    The tick — the one memorable thing. A square box that fills with green ink
+    while the tick is drawn in, like a pen stroke.
+  */
   .check {
-    @apply grid size-[24px] shrink-0 place-items-center rounded-full border-2;
+    @apply grid size-[18px] shrink-0 place-items-center border-[1.5px];
+    border-radius: 5px;
     border-color: var(--line-strong);
-    background: var(--panel);
-    transition: transform 220ms cubic-bezier(0.25, 0.9, 0.3, 1), background-color 180ms, border-color 180ms;
+    background: var(--paper);
+    transition: background-color 150ms ease-out, border-color 150ms ease-out;
   }
   .check:hover {
     border-color: var(--accent);
   }
-  .check:active {
-    transform: scale(0.86);
-    transition-duration: 80ms;
-  }
   .check svg {
-    @apply size-3;
+    width: 12px;
+    height: 12px;
     fill: none;
     stroke: var(--accent-ink);
-    stroke-width: 2.6;
+    stroke-width: 2.2;
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-dasharray: 16;
     stroke-dashoffset: 16;
-    transition: stroke-dashoffset 220ms ease-out 40ms;
+    transition: stroke-dashoffset 180ms ease-out 30ms;
   }
   .check-on {
     background: var(--accent);
@@ -282,64 +296,46 @@ label:has(> input[type="checkbox"]) {
   }
 
   .task-title {
-    transition: color 200ms;
+    transition: color 150ms;
     text-decoration-line: line-through;
     text-decoration-color: transparent;
-    text-decoration-thickness: 1.5px;
+    text-decoration-thickness: 1px;
   }
   .task-done {
     color: var(--faint);
     text-decoration-color: var(--faint);
   }
 
-  .chip {
-    @apply inline-flex items-center gap-1 rounded-[6px] px-1.5 py-0.5 text-xs font-semibold;
-  }
-
-  /* Rows and cards arrive with a short rise. */
-  .rise {
-    animation: rise 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  }
-
-  /*
-    Dialogs materialize: blur, scale and opacity arrive together and leave
-    along the same path. On phones they are bottom sheets.
-  */
+  /* Dialogs: fade and a 4px lift, leaving the same way. Bottom sheets on phones. */
   .sheet {
-    @apply w-[calc(100%-2rem)] border bg-panel p-0 text-ink;
-    /* !important: dialogs can sit inside space-y containers, whose margins would win. */
-    margin: auto !important;
-    border-radius: var(--radius);
-    border-color: var(--material-line);
-    box-shadow: var(--shadow-float);
+    @apply w-[calc(100%-2rem)] border border-line bg-paper p-0 text-ink;
+    margin: auto !important; /* dialogs can sit inside space-y containers */
+    border-radius: var(--radius-overlay);
+    box-shadow: var(--shadow-overlay); /* taste-skill-ignore: dialogs are overlays */
     opacity: 0;
-    transform: translateY(10px) scale(0.96);
-    filter: blur(6px);
+    transform: translateY(4px);
     transition:
-      opacity 200ms ease,
-      transform 360ms cubic-bezier(0.2, 0.9, 0.25, 1),
-      filter 260ms ease,
-      overlay 360ms allow-discrete,
-      display 360ms allow-discrete;
+      opacity 160ms ease-out,
+      transform 160ms ease-out,
+      overlay 160ms allow-discrete,
+      display 160ms allow-discrete;
   }
   .sheet[open] {
     opacity: 1;
     transform: none;
-    filter: none;
   }
   @starting-style {
     .sheet[open] {
       opacity: 0;
-      transform: translateY(10px) scale(0.96);
-      filter: blur(6px);
+      transform: translateY(4px);
     }
   }
   .sheet::backdrop {
     background: transparent;
     transition:
-      background-color 300ms ease,
-      overlay 360ms allow-discrete,
-      display 360ms allow-discrete;
+      background-color 160ms ease-out,
+      overlay 160ms allow-discrete,
+      display 160ms allow-discrete;
   }
   .sheet[open]::backdrop {
     background: var(--overlay);
@@ -349,114 +345,109 @@ label:has(> input[type="checkbox"]) {
       background: transparent;
     }
   }
-
   @media (max-width: 639px) {
     .sheet {
       margin: auto 0 0 !important;
       width: 100%;
       max-width: none;
       max-height: 92dvh;
-      border-radius: 22px 22px 0 0;
+      border-radius: var(--radius-overlay) var(--radius-overlay) 0 0;
       border-bottom: 0;
       padding-bottom: env(safe-area-inset-bottom);
-      transform: translateY(100%);
-      filter: none;
       opacity: 1;
+      transform: translateY(100%);
+      transition-duration: 220ms;
     }
     .sheet[open] {
       transform: none;
     }
     @starting-style {
       .sheet[open] {
-        transform: translateY(100%);
         opacity: 1;
-        filter: none;
+        transform: translateY(100%);
       }
     }
   }
-
-  /* Grabber on bottom sheets. */
   .grabber {
-    @apply mx-auto mt-2 mb-1 h-[5px] w-9 rounded-full sm:hidden;
+    @apply mx-auto mt-2 mb-1 h-1 w-8 rounded-full sm:hidden;
     background: var(--line-strong);
   }
 }
 
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
+/* Swipe action panes: the icon grows toward the finger. */
+.swipe-pane > span {
+  transition: scale 150ms ease-out;
+}
+.swipe-pane.armed > span {
+  scale: 1.1;
 }
 
-/* Reduced motion: gentle cross-fades instead of slides, springs and scales. */
 @media (prefers-reduced-motion: reduce) {
-  .check svg,
-  .check,
-  .press {
+  *,
+  *::before,
+  *::after {
     transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
   }
-  .press:active,
-  .check:active {
+  .press:active {
     transform: none !important;
-  }
-  .rise {
-    animation: fade 200ms ease both;
   }
   .sheet,
   .sheet[open] {
     transform: none !important;
-    filter: none !important;
-    transition:
-      opacity 200ms ease,
-      overlay 200ms allow-discrete,
-      display 200ms allow-discrete;
-  }
-  @starting-style {
-    .sheet[open] {
-      opacity: 0;
-    }
-  }
-  @media (max-width: 639px) {
-    .sheet {
-      opacity: 0;
-    }
-    .sheet[open] {
-      opacity: 1;
-    }
-  }
-}
-
-@keyframes fade {
-  from {
-    opacity: 0;
   }
 }
 
 /* Rendered Markdown in subtask notes. */
 .note-body > * + * { margin-top: 0.6em; }
-.note-body h1, .note-body h2, .note-body h3 { font-weight: 700; line-height: 1.3; letter-spacing: -0.012em; }
-.note-body h1 { font-size: 1.2em; }
-.note-body h2 { font-size: 1.1em; }
+.note-body h1, .note-body h2, .note-body h3 { font-weight: 600; line-height: 1.3; }
+.note-body h1 { font-size: 1.15em; }
+.note-body h2 { font-size: 1.05em; }
 .note-body ul { list-style: disc; padding-left: 1.3em; }
 .note-body ol { list-style: decimal; padding-left: 1.3em; }
 .note-body li + li { margin-top: 0.2em; }
 .note-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
-.note-body code { font-size: 0.88em; background: var(--sunken); padding: 0.1em 0.35em; border-radius: 5px; }
-.note-body pre { background: var(--sunken); padding: 0.75em 1em; border-radius: 10px; overflow-x: auto; }
+.note-body code { font-size: 0.9em; background: var(--side); padding: 0.1em 0.35em; border-radius: 4px; }
+.note-body pre { background: var(--side); padding: 0.75em 1em; border-radius: var(--radius); overflow-x: auto; }
 .note-body pre code { background: none; padding: 0; }
-.note-body blockquote { border-left: 3px solid var(--line-strong); padding-left: 0.9em; color: var(--muted); }
+.note-body blockquote { border-left: 2px solid var(--line-strong); padding-left: 0.9em; color: var(--muted); }
 .note-body hr { border-color: var(--line); }
 
-/* Swipe action panes: the icon grows toward the finger, then pops when the action arms. */
-.swipe-pane > span {
-  transition: scale 160ms cubic-bezier(0.3, 1.6, 0.5, 1);
+/* Sidebar rows: navigation and the tools at the bottom share one look. */
+@layer components {
+  .nav-item {
+    @apply press flex min-h-8 w-full items-center gap-2.5 px-2 font-medium text-muted hover:bg-hover hover:text-ink;
+    font-size: var(--text-meta);
+    border-radius: var(--radius);
+  }
+  .nav-item[aria-current="page"] {
+    @apply bg-hover text-ink;
+  }
+  .kbd {
+    @apply inline-grid min-w-[1.25rem] place-items-center border border-line px-1 font-sans leading-[1.125rem] text-faint;
+    font-size: var(--text-small);
+    border-radius: 4px;
+  }
 }
-.swipe-pane.armed > span {
-  scale: 1.14;
-}
-@media (prefers-reduced-motion: reduce) {
-  .swipe-pane > span {
-    transition: none;
+
+@layer components {
+  /* Compact controls for toolbars: a quiet frame that only darkens on hover/focus. */
+  .field-sm {
+    @apply block h-9 w-full border border-line bg-paper px-2.5 text-ink placeholder:text-faint;
+    font-size: var(--text-meta);
+    border-radius: var(--radius);
+    transition: border-color 150ms;
+  }
+  .field-sm:hover {
+    border-color: var(--line-strong);
+  }
+  .field-sm:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .select-quiet {
+    @apply press h-9 border border-transparent bg-transparent pl-2 pr-1 font-medium text-muted hover:bg-hover hover:text-ink;
+    font-size: var(--text-meta);
+    border-radius: var(--radius);
   }
 }

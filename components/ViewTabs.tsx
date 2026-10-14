@@ -19,27 +19,14 @@ function useActive() {
 export function SideNav() {
   const isActive = useActive();
   return (
-    <nav aria-label="Views" className="space-y-1">
+    <nav aria-label="Views" className="space-y-0.5">
       {VIEWS.map(({ href, label, key, icon }) => {
         const active = isActive(href);
         return (
-          <Link
-            key={href}
-            href={href}
-            aria-current={active ? "page" : undefined}
-            className={`press group flex min-h-11 items-center gap-3 rounded-[10px] px-3 text-[0.9375rem] font-semibold ${
-              active ? "bg-panel text-accent shadow-[0_1px_2px_rgb(0_0_0/0.06)]" : "text-muted hover:bg-hover hover:text-ink active:bg-sunken"
-            }`}
-          >
-            <Icon name={icon} className="size-5" strokeWidth={active ? 2.1 : 1.8} />
+          <Link key={href} href={href} aria-current={active ? "page" : undefined} className="nav-item group">
+            <Icon name={icon} className={active ? "size-4 text-ink" : "size-4"} />
             <span className="flex-1">{label}</span>
-            <kbd
-              className={`rounded-md border px-1.5 font-sans text-[11px] font-semibold ${
-                active ? "border-accent/30 text-accent" : "border-line text-faint group-hover:text-muted"
-              }`}
-            >
-              {key}
-            </kbd>
+            <kbd className="kbd opacity-0 transition-opacity duration-150 group-hover:opacity-100">{key}</kbd>
           </Link>
         );
       })}
@@ -47,13 +34,13 @@ export function SideNav() {
   );
 }
 
-/** Bottom tab bar for phones and tablets. */
+/** Bottom tab bar for phones and tablets: solid, one hairline on top. */
 export function BottomNav() {
   const isActive = useActive();
   return (
     <nav
       aria-label="Views"
-      className="material fixed inset-x-0 bottom-0 z-30 pb-[env(safe-area-inset-bottom)] shadow-[0_-0.5px_0_var(--material-line),inset_0_0.5px_0_var(--material-edge)] lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-paper pb-[env(safe-area-inset-bottom)] lg:hidden"
     >
       <div className="mx-auto flex max-w-md">
         {VIEWS.map(({ href, label, icon }) => {
@@ -63,11 +50,11 @@ export function BottomNav() {
               key={href}
               href={href}
               aria-current={active ? "page" : undefined}
-              className={`press flex min-h-[3.25rem] flex-1 flex-col items-center justify-center gap-0.5 pt-1 text-[0.6875rem] font-semibold tracking-[0.01em] ${
-                active ? "text-accent" : "text-muted hover:text-ink"
+              className={`press flex min-h-14 flex-1 flex-col items-center justify-center gap-1 text-[0.6875rem] font-medium ${
+                active ? "text-ink" : "text-faint hover:text-muted"
               }`}
             >
-              <Icon name={icon} className="size-[26px]" strokeWidth={active ? 2.2 : 1.7} />
+              <Icon name={icon} className="size-5" strokeWidth={active ? 2 : 1.75} />
               {label}
             </Link>
           );

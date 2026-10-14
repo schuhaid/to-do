@@ -5,7 +5,7 @@ import { formatShortDate, todayISO } from "@/lib/dates";
 import { buildStats } from "@/lib/stats";
 import DashboardCharts from "@/components/dashboard/DashboardCharts";
 
-export const metadata: Metadata = { title: "Dashboard · Ticked" };
+export const metadata: Metadata = { title: "Dashboard – Ticked" };
 
 export default async function DashboardPage() {
   const todos = await getTodosWithSubtasks();
@@ -13,17 +13,16 @@ export default async function DashboardPage() {
   const stats = buildStats(todos, today);
 
   return (
-    <main>
-      <header className="mb-6">
-        <p className="eyebrow">{formatShortDate(today)}</p>
-        <h1 className="page-title mt-1">Dashboard</h1>
-        <p className="mt-1.5 text-muted">What&apos;s left, what&apos;s due, and what you&apos;ve finished.</p>
+    <main className="w-full max-w-5xl">
+      <header className="mb-10">
+        <h1 className="page-title">Dashboard</h1>
+        <p className="meta mt-1">{formatShortDate(today)}</p>
       </header>
       {todos.length === 0 ? (
-        <div className="panel flex flex-col items-center px-6 py-16 text-center">
-          <p className="font-bold">Nothing to chart yet</p>
-          <p className="mt-1 text-sm text-muted">Your dashboard fills up as you add tasks.</p>
-          <Link href="/todos" className="btn mt-5">Add your first task</Link>
+        <div className="py-10">
+          <p className="font-medium">Nothing to show yet</p>
+          <p className="meta mt-1">The numbers fill in as you add and tick off tasks.</p>
+          <Link href="/todos" className="btn btn-sm mt-5">Add a task</Link>
         </div>
       ) : (
         <DashboardCharts stats={stats} today={today} />

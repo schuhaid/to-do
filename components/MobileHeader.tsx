@@ -6,10 +6,9 @@ import Wordmark from "./Wordmark";
 
 /**
  * Phone/tablet top bar, iOS-style.
- * - Transparent at the top; becomes translucent material with a hairline once
- *   content scrolls underneath (a scroll-edge effect, not a permanent divider).
- * - When the page's large title scrolls under the bar, a small inline title
- *   rises into the middle of the bar, so you always know where you are.
+ * - Solid paper; a 1px line appears only once content scrolls underneath.
+ * - When the page title scrolls under the bar, a small copy fades into the
+ *   middle of the bar, so you always know where you are.
  */
 export default function MobileHeader({ actions }: { actions: React.ReactNode }) {
   const pathname = usePathname();
@@ -45,17 +44,17 @@ export default function MobileHeader({ actions }: { actions: React.ReactNode }) 
 
   return (
     <header
-      className={`sticky top-0 z-30 grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 pt-[env(safe-area-inset-top)] transition-[background-color,box-shadow,backdrop-filter] duration-200 sm:px-5 lg:hidden ${
-        scrolled ? "material shadow-[0_0.5px_0_var(--material-line)]" : "bg-transparent"
+      className={`sticky top-0 z-30 grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-b bg-paper px-3 pt-[env(safe-area-inset-top)] transition-colors duration-150 sm:px-6 lg:hidden ${
+        scrolled ? "border-line" : "border-transparent"
       }`}
     >
-      <div className="flex min-h-13 items-center pl-1">
+      <div className="flex min-h-12 items-center pl-2">
         <Wordmark />
       </div>
       <p
         aria-hidden={!showTitle}
-        className={`max-w-[42vw] truncate text-center text-[0.9375rem] font-semibold tracking-[-0.012em] transition-[opacity,transform] duration-200 ease-out motion-reduce:transition-opacity ${
-          showTitle ? "translate-y-0 opacity-100" : "translate-y-1.5 opacity-0 motion-reduce:translate-y-0"
+        className={`max-w-[42vw] truncate text-center text-[0.875rem] font-semibold transition-opacity duration-150 ${
+          showTitle ? "opacity-100" : "opacity-0"
         }`}
       >
         {title}

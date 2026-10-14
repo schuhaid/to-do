@@ -70,37 +70,37 @@ export default function KeyboardShortcuts() {
       <button
         type="button"
         onClick={() => dialogRef.current?.showModal()}
-        className="press flex min-h-11 w-full items-center gap-3 rounded-[10px] px-3 text-[0.9375rem] font-semibold text-muted hover:bg-hover hover:text-ink active:bg-sunken"
+        className="nav-item"
         title="Keyboard shortcuts (?)"
       >
-        <Icon name="keyboard" className="size-5" />
+        <Icon name="keyboard" />
         <span className="flex-1 text-left">Shortcuts</span>
-        <kbd className="rounded-md border border-line px-1.5 font-sans text-[11px] font-semibold text-faint">?</kbd>
+        <kbd className="kbd">?</kbd>
       </button>
       <dialog
         ref={dialogRef}
         onClick={(e) => e.target === dialogRef.current && dialogRef.current?.close()}
         aria-labelledby="shortcuts-title"
-        className="sheet max-w-sm origin-bottom-left"
+        className="sheet max-w-sm"
       >
-        <div className="p-6">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 id="shortcuts-title" className="text-lg font-bold tracking-tight">Keyboard shortcuts</h2>
+        <div className="p-5">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 id="shortcuts-title" className="section-title">Keyboard shortcuts</h2>
             <button
               type="button"
               onClick={() => dialogRef.current?.close()}
-              className="press grid size-9 place-items-center rounded-full bg-sunken text-muted hover:text-ink"
+              className="press -mr-2 grid size-9 place-items-center rounded-md text-muted hover:bg-hover hover:text-ink"
               aria-label="Close"
             >
-              <Icon name="x" className="size-[18px]" />
+              <Icon name="x" />
             </button>
           </div>
-          <dl className="divide-y divide-line rounded-[10px] border border-line text-sm">
+          <dl className="text-[0.8125rem]">
             {SHORTCUTS.map(([key, label]) => (
-              <div key={key} className="flex items-center justify-between px-4 py-2.5">
+              <div key={key} className="flex items-center justify-between py-1.5">
                 <dt className="text-muted">{label}</dt>
                 <dd>
-                  <kbd className="inline-grid min-w-7 place-items-center rounded-md border border-line-strong bg-sunken px-2 py-0.5 font-sans text-xs font-semibold">{key}</kbd>
+                  <kbd className="kbd text-muted">{key}</kbd>
                 </dd>
               </div>
             ))}
