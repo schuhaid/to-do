@@ -29,11 +29,11 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  // Don't put code between createServerClient and getUser(): this call
-  // is what refreshes an expired session.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Don't put code between createServerClient and getClaims(): this call
+  // is what refreshes an expired session. getClaims() verifies the JWT
+  // locally (asymmetric signing keys), so it usually needs no network trip.
+  const { data } = await supabase.auth.getClaims();
+  const user = data?.claims?.sub ? data.claims : null;
 
   const path = request.nextUrl.pathname;
   const isAuthPage = AUTH_PAGES.includes(path);
