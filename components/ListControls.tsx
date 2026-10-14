@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { listHref, type ListQuery } from "@/lib/list-query";
 import type { DueFilter, SortKey } from "@/lib/types";
+import Icon from "./Icon";
 
 const DUE_OPTIONS: { value: DueFilter; label: string }[] = [
   { value: "any", label: "Any due date" },
@@ -43,10 +44,9 @@ export default function ListControls({ query }: { query: ListQuery }) {
     <div className="flex flex-wrap items-center gap-2">
       <label className="relative min-w-0 flex-1 basis-full sm:basis-48">
         <span className="sr-only">Search tasks</span>
-        <svg viewBox="0 0 16 16" className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-faint" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-          <circle cx="7" cy="7" r="4.5" />
-          <path d="M10.5 10.5L14 14" strokeLinecap="round" />
-        </svg>
+        <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint">
+          <Icon name="search" className="size-[18px]" />
+        </span>
         <input
           id="search"
           type="search"
@@ -54,7 +54,7 @@ export default function ListControls({ query }: { query: ListQuery }) {
           onChange={(e) => setQ(e.target.value)}
           onKeyDown={(e) => e.key === "Escape" && (e.target as HTMLInputElement).blur()}
           placeholder="Search tasks, subtasks, #tags"
-          className="field py-2 pl-9 text-sm"
+          className="field min-h-11 py-2 pl-10 text-sm"
         />
       </label>
       <div className="flex w-full gap-2 sm:w-auto">
@@ -62,7 +62,7 @@ export default function ListControls({ query }: { query: ListQuery }) {
         aria-label="Filter by due date"
         value={query.due}
         onChange={(e) => go({ due: e.target.value as DueFilter })}
-        className="field min-w-0 flex-1 py-2 pr-8 text-sm sm:w-auto sm:flex-none"
+        className="field min-h-11 min-w-0 flex-1 py-2 pr-8 text-sm sm:w-auto sm:flex-none"
       >
         {DUE_OPTIONS.map((o) => (
           <option key={o.value} value={o.value}>{o.label}</option>
@@ -72,7 +72,7 @@ export default function ListControls({ query }: { query: ListQuery }) {
         aria-label="Sort tasks"
         value={query.sort}
         onChange={(e) => go({ sort: e.target.value as SortKey })}
-        className="field min-w-0 flex-1 py-2 pr-8 text-sm sm:w-auto sm:flex-none"
+        className="field min-h-11 min-w-0 flex-1 py-2 pr-8 text-sm sm:w-auto sm:flex-none"
       >
         {SORT_OPTIONS.map((o) => (
           <option key={o.value} value={o.value}>{o.label}</option>
@@ -82,11 +82,11 @@ export default function ListControls({ query }: { query: ListQuery }) {
       {query.tag && (
         <Link
           href={listHref(query, { tag: "" })}
-          className="inline-flex items-center gap-1 rounded-lg bg-accent-soft px-2.5 py-1.5 text-sm font-medium text-accent"
+          className="inline-flex min-h-9 items-center gap-1 rounded-full bg-accent-soft px-3 text-sm font-semibold text-accent hover:bg-accent hover:text-accent-ink"
           aria-label={`Remove tag filter #${query.tag}`}
         >
           #{query.tag}
-          <span aria-hidden="true">×</span>
+          <Icon name="x" className="size-3.5" strokeWidth={2.4} />
         </Link>
       )}
     </div>

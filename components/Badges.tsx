@@ -6,7 +6,7 @@ const dueStyles = {
   overdue: "bg-danger-soft text-danger",
   today: "bg-warn-soft text-warn",
   soon: "bg-accent-soft text-accent",
-  later: "text-muted",
+  later: "bg-sunken text-muted",
 } as const;
 
 /** Due date pill, colored by urgency. Text always says the state, not just color. */
@@ -21,9 +21,9 @@ export function DueBadge({
 }) {
   if (!due) return null;
   const status = dueStatus(due, done, today);
-  const style = status ? dueStyles[status] : "text-faint";
+  const style = status ? dueStyles[status] : "bg-sunken text-faint";
   return (
-    <span className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-medium ${style}`}>
+    <span className={`chip ${style}`}>
       <svg viewBox="0 0 16 16" className="size-3" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
         <rect x="2.5" y="3.5" width="11" height="10" rx="2" />
         <path d="M2.5 7h11M5.5 2v3M10.5 2v3" strokeLinecap="round" />
@@ -37,7 +37,7 @@ export function DueBadge({
 export function PriorityBadge({ priority }: { priority: Priority }) {
   if (!priority) return null;
   return (
-    <span className="inline-flex items-center gap-1 text-xs font-medium text-muted" title={`${PRIORITY_LABELS[priority]} priority`}>
+    <span className="inline-flex items-center gap-1 text-xs font-semibold text-muted" title={`${PRIORITY_LABELS[priority]} priority`}>
       <PriorityIcon priority={priority} />
       {PRIORITY_LABELS[priority]}
     </span>
@@ -55,7 +55,7 @@ export function PriorityIcon({ priority }: { priority: Priority }) {
           width="2.6"
           height={3 + i * 3}
           rx="1"
-          className={i < priority ? "fill-ink" : "fill-faint opacity-35"}
+          className={i < priority ? (priority === 3 ? "fill-warn" : "fill-ink") : "fill-faint opacity-35"}
         />
       ))}
     </svg>
@@ -66,7 +66,7 @@ export function ProgressBadge({ done, total }: { done: number; total: number }) 
   if (total === 0) return null;
   const complete = done === total;
   return (
-    <span className={`inline-flex items-center gap-1.5 text-xs font-medium tabular-nums ${complete ? "text-accent" : "text-muted"}`}>
+    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold tabular-nums ${complete ? "text-accent" : "text-muted"}`}>
       <span className="relative h-1.5 w-10 overflow-hidden rounded-full bg-line" aria-hidden="true">
         <span className="absolute inset-y-0 left-0 rounded-full bg-accent" style={{ width: `${(done / total) * 100}%` }} />
       </span>
@@ -76,9 +76,9 @@ export function ProgressBadge({ done, total }: { done: number; total: number }) 
 }
 
 export function TagChip({ tag, href }: { tag: string; href?: string }) {
-  const cls = "rounded-md bg-hover px-1.5 py-0.5 text-xs font-medium text-muted";
+  const cls = "chip bg-accent-soft/60 text-accent";
   return href ? (
-    <Link href={href} className={`${cls} hover:text-ink`}>#{tag}</Link>
+    <Link href={href} className={`${cls} hover:bg-accent hover:text-accent-ink`}>#{tag}</Link>
   ) : (
     <span className={cls}>#{tag}</span>
   );

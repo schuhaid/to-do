@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import type { AuthState } from "@/app/(auth)/actions";
+import Icon from "@/components/Icon";
 
 type Props = {
   mode: "login" | "signup";
@@ -39,10 +40,10 @@ export default function AuthForm({ mode, action, notice }: Props) {
 
   if (state?.message) {
     return (
-      <div className="space-y-3 text-center">
-        <h1 className="text-xl font-semibold tracking-tight">Check your inbox</h1>
+      <div className="space-y-3">
+        <h1 className="page-title">Check your inbox</h1>
         <p className="text-muted">{state.message}</p>
-        <Link href="/login" className="link inline-block pt-2">Back to log in</Link>
+        <Link href="/login" className="btn-outline mt-4 w-full">Back to log in</Link>
       </div>
     );
   }
@@ -51,18 +52,18 @@ export default function AuthForm({ mode, action, notice }: Props) {
 
   return (
     <form action={formAction} className="space-y-5">
-      <div className="space-y-1 text-center">
-        <h1 className="text-xl font-semibold tracking-tight">{t.title}</h1>
-        <p className="text-sm text-muted">{t.intro}</p>
+      <div className="mb-8 space-y-2">
+        <h1 className="page-title">{t.title}</h1>
+        <p className="text-muted">{t.intro}</p>
       </div>
 
       <label className="block space-y-1.5">
-        <span className="text-sm font-medium">Email</span>
+        <span className="text-sm font-semibold">Email</span>
         <input name="email" type="email" required autoComplete="email" className="field" />
       </label>
 
       <label className="block space-y-1.5">
-        <span className="text-sm font-medium">Password</span>
+        <span className="text-sm font-semibold">Password</span>
         <input
           name="password"
           type="password"
@@ -77,7 +78,8 @@ export default function AuthForm({ mode, action, notice }: Props) {
       </label>
 
       {error && (
-        <p role="alert" className="rounded-xl bg-danger-soft px-4 py-3 text-sm text-danger">
+        <p role="alert" className="flex gap-2.5 rounded-[10px] border border-danger/25 bg-danger-soft px-4 py-3 text-sm font-medium text-danger">
+          <Icon name="alert" className="mt-0.5 size-4 shrink-0" />
           {error}
         </p>
       )}
@@ -86,7 +88,7 @@ export default function AuthForm({ mode, action, notice }: Props) {
         {pending ? t.pending : t.submit}
       </button>
 
-      <p className="text-center text-sm text-muted">
+      <p className="border-t border-line pt-5 text-center text-sm text-muted">
         {t.switchText}{" "}
         <Link href={t.switchHref} className="link">{t.switchLink}</Link>
       </p>

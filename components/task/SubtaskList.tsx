@@ -38,7 +38,7 @@ export default function SubtaskList({
   return (
     <div>
       {items.length > 0 ? (
-        <ul className="mt-2 divide-y divide-line border-y border-line">
+        <ul className="divide-y divide-line border-b border-line">
           {items.map((s, i) => (
             <SubtaskItem
               key={s.id}
@@ -51,12 +51,12 @@ export default function SubtaskList({
           ))}
         </ul>
       ) : (
-        <p className="px-5 pb-2 pt-1 text-sm text-muted sm:px-6">
+        <p className="px-5 pt-5 text-sm text-muted sm:px-6">
           Break this task into smaller steps. Each one can have its own note and due date.
         </p>
       )}
 
-      <form ref={formRef} action={add} className="flex gap-2 p-4 sm:px-6">
+      <form ref={formRef} action={add} className="flex gap-2 bg-sunken/60 p-4 sm:px-6">
         <label htmlFor="new-subtask" className="sr-only">New subtask</label>
         <input
           id="new-subtask"
@@ -65,9 +65,9 @@ export default function SubtaskList({
           maxLength={500}
           autoComplete="off"
           placeholder="Add a subtask…"
-          className="field flex-1 py-2.5"
+          className="field min-h-11 flex-1 py-2"
         />
-        <button type="submit" className="btn py-2.5">Add</button>
+        <button type="submit" className="btn">Add</button>
       </form>
     </div>
   );

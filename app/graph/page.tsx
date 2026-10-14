@@ -12,16 +12,18 @@ export default async function GraphPage() {
   const graph = buildGraph(todos, todayISO());
 
   return (
-    <main className="mt-4 sm:mt-8">
-      <div className="mb-5 px-1">
-        <h1 className="text-[28px] font-semibold leading-tight tracking-tight sm:text-[32px]">Graph</h1>
-        <p className="mt-1 text-muted">
+    <main>
+      <header className="mb-6">
+        <p className="eyebrow">Map</p>
+        <h1 className="page-title mt-1">Graph</h1>
+        <p className="mt-1.5 max-w-xl text-muted">
           Every task and its subtasks. Drag to move, scroll or pinch to zoom, click a node to open it.
         </p>
-      </div>
+      </header>
       {todos.length === 0 ? (
-        <div className="panel px-6 py-14 text-center">
-          <p className="text-muted">Your graph grows as you add tasks and subtasks.</p>
+        <div className="panel flex flex-col items-center px-6 py-16 text-center">
+          <p className="font-bold">An empty map</p>
+          <p className="mt-1 text-sm text-muted">Your graph grows as you add tasks and subtasks.</p>
           <Link href="/todos" className="btn mt-5">Add your first task</Link>
         </div>
       ) : (

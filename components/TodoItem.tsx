@@ -12,10 +12,12 @@ export default function TodoItem({
   todo,
   today,
   query,
+  index = 0,
 }: {
   todo: TodoWithSubtasks;
   today: string;
   query: ListQuery;
+  index?: number;
 }) {
   const [done, setOptimisticDone] = useOptimistic(todo.done);
   const [title, setOptimisticTitle] = useOptimistic(todo.title);
@@ -44,11 +46,15 @@ export default function TodoItem({
 
   return (
     <li
-      className={`group flex items-start gap-3.5 px-4 py-3 transition-colors hover:bg-hover sm:px-5 ${
+      style={{ animationDelay: `${Math.min(index * 25, 250)}ms` }}
+      className={`rise group relative flex items-start gap-3.5 px-4 py-3.5 transition-colors duration-150 hover:bg-hover sm:px-5 ${
         pending ? "opacity-60" : ""
       }`}
     >
-      <div className="pt-1">
+      {todo.priority === 3 && !done && (
+        <span className="absolute inset-y-3 left-0 w-[3px] rounded-r-full bg-warn" aria-hidden="true" />
+      )}
+      <div className="pt-0.5">
         <Checkbox checked={done} onToggle={toggle} label={title} />
       </div>
 
@@ -65,7 +71,7 @@ export default function TodoItem({
             onKeyDown={(e) => e.key === "Escape" && setEditing(false)}
             className="field flex-1 py-2"
           />
-          <button type="submit" className="btn px-4 py-2 text-sm">Save</button>
+          <button type="submit" className="btn btn-sm">Save</button>
           <button type="button" onClick={() => setEditing(false)} className="btn-quiet">Cancel</button>
         </form>
       ) : (
@@ -77,12 +83,12 @@ export default function TodoItem({
                 e.preventDefault();
                 setEditing(true);
               }}
-              className={`task-title block break-words hover:underline hover:decoration-line hover:underline-offset-4 ${done ? "task-done" : ""}`}
+              className={`task-title block break-words font-medium hover:text-accent ${done ? "task-done" : ""}`}
             >
               {title}
             </Link>
             {hasMeta ? (
-              <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              <div className="mt-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
                 <DueBadge due={todo.due_date} done={done} today={today} />
                 <ProgressBadge done={subDone} total={todo.subtasks.length} />
                 <PriorityBadge priority={todo.priority} />
@@ -92,7 +98,7 @@ export default function TodoItem({
               </div>
             ) : null}
           </div>
-          <div className="flex shrink-0 gap-0.5 text-faint sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+          <div className="-my-1 flex shrink-0 gap-0.5 text-muted sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
             <IconButton label={`Rename "${title}"`} onClick={() => setEditing(true)}>
               <path d="M10.8 2.7l2.5 2.5-7.6 7.6-3.2.7.7-3.2 7.6-7.6z" />
             </IconButton>
@@ -126,11 +132,11 @@ export function IconButton({
       disabled={disabled}
       aria-label={label}
       title={label}
-      className={`grid size-9 place-items-center rounded-lg transition-colors hover:bg-panel disabled:pointer-events-none disabled:opacity-30 ${
+      className={`grid size-10 place-items-center rounded-lg transition-colors duration-150 hover:bg-panel hover:ring-1 hover:ring-line disabled:pointer-events-none disabled:opacity-30 ${
         danger ? "hover:text-danger" : "hover:text-ink"
       }`}
     >
-      <svg viewBox="0 0 16 16" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <svg viewBox="0 0 16 16" className="size-[17px]" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         {children}
       </svg>
     </button>

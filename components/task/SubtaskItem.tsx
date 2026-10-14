@@ -43,8 +43,8 @@ export default function SubtaskItem({
 
   return (
     <li className={pending ? "opacity-70" : ""}>
-      <div className="group flex items-start gap-3 px-5 py-2.5 hover:bg-hover sm:px-6">
-        <div className="pt-[5px]">
+      <div className="group flex items-start gap-3 px-5 py-2.5 transition-colors duration-150 hover:bg-hover sm:px-6">
+        <div className="pt-[11px]">
           <Checkbox small checked={s.done} label={s.title} onToggle={() => save({ done: !s.done })} />
         </div>
 
@@ -61,7 +61,7 @@ export default function SubtaskItem({
               onKeyDown={(e) => e.key === "Escape" && setEditing(false)}
               className="field flex-1 py-1.5"
             />
-            <button type="submit" className="btn px-3 py-1.5 text-sm">Save</button>
+            <button type="submit" className="btn btn-sm">Save</button>
           </form>
         ) : (
           <button
@@ -69,14 +69,14 @@ export default function SubtaskItem({
             onClick={() => setOpen(!open)}
             aria-expanded={open}
             aria-controls={detailsId}
-            className="min-w-0 flex-1 py-0.5 text-left"
+            className="min-h-11 min-w-0 flex-1 py-2 text-left"
           >
             <span className={`task-title break-words ${s.done ? "task-done" : ""}`}>{s.title}</span>
             {(s.due_date || s.note) && (
               <span className="mt-1 flex flex-wrap items-center gap-2">
                 <DueBadge due={s.due_date} done={s.done} today={today} />
                 {s.note && (
-                  <span className="inline-flex items-center gap-1 text-xs text-muted">
+                  <span className="chip bg-sunken text-muted">
                     <svg viewBox="0 0 16 16" className="size-3" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
                       <path d="M4 2.5h5.5L12.5 5.5v8h-8.5z M9.5 2.5v3h3 M6 8.5h4.5M6 11h3" strokeLinejoin="round" strokeLinecap="round" />
                     </svg>
@@ -88,7 +88,7 @@ export default function SubtaskItem({
           </button>
         )}
 
-        <div className="flex shrink-0 items-center text-faint">
+        <div className="flex shrink-0 items-center text-muted">
           <div className="flex sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
             <IconButton label="Move up" onClick={() => onMove(-1)} disabled={!canMoveUp}>
               <path d="M8 12.5v-9M4.5 7L8 3.5 11.5 7" />
@@ -104,16 +104,16 @@ export default function SubtaskItem({
       </div>
 
       {open && (
-        <div id={detailsId} className="space-y-4 bg-hover/60 px-5 pb-4 pt-1 sm:pl-[3.75rem] sm:pr-6">
+        <div id={detailsId} className="space-y-4 border-t border-dashed border-line bg-sunken/60 px-5 py-4 sm:pl-[3.75rem] sm:pr-6">
           <Note note={s.note} onSave={(note) => save({ note })} />
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <label className="flex items-center gap-2">
-              <span className="font-medium text-muted">Due</span>
+              <span className="font-semibold">Due</span>
               <input
                 type="date"
                 value={s.due_date ?? ""}
                 onChange={(e) => save({ due_date: e.target.value || null })}
-                className="field w-auto py-1.5 text-sm"
+                className="field min-h-9 w-auto py-1.5 text-sm"
               />
             </label>
             {s.due_date && (
@@ -124,7 +124,7 @@ export default function SubtaskItem({
             <button
               type="button"
               onClick={() => startTransition(() => deleteSubtask(s.id))}
-              className="btn-quiet hover:text-danger!"
+              className="btn-quiet hover:bg-danger-soft! hover:text-danger!"
             >
               Delete
             </button>

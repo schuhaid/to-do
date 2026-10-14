@@ -1,57 +1,74 @@
 @import "tailwindcss";
 
-/* Calm palette: cool mist background, white panel, ink text, one sage accent. */
+/*
+  Ticked design system: flat, calm, focused.
+  Deep-teal ink on a cool mint-grey canvas, one teal action color,
+  amber reserved for "today". Borders instead of shadows.
+  Every text color below meets WCAG AA (4.5:1) on --panel and --bg.
+*/
 :root {
-  --bg: #f3f5f7;
+  --bg: #f3f7f6;
   --panel: #ffffff;
-  --ink: #1f2530;
-  --muted: #6a7282;
-  --faint: #a3aab6;
-  --line: #e7eaef;
-  --hover: #f5f7f9;
-  --accent: #3f7a66;
+  --sunken: #eef4f2;
+  --ink: #0f2a27;
+  --muted: #4a605c;
+  --faint: #7d918d;
+  --line: #dde8e5;
+  --line-strong: #c3d3cf;
+  --hover: #f0f6f4;
+  --accent: #0f766e;
+  --accent-hover: #0d655e;
   --accent-ink: #ffffff;
-  --accent-soft: #e6f0ec;
-  --danger: #b4363f;
-  --danger-soft: #fbecec;
-  --warn: #9a5b0c;
-  --warn-soft: #fbf0df;
-  --open: #2a78d6;
-  --done: #2f8a63;
-  --shadow: 0 1px 2px rgb(31 37 48 / 0.04), 0 8px 24px -12px rgb(31 37 48 / 0.12);
+  --accent-soft: #dcf0ec;
+  --danger: #b91c1c;
+  --danger-soft: #fdecec;
+  --warn: #b45309;
+  --warn-soft: #fef3c7;
+  --open: #2563eb;
+  --done: #0f766e;
+  --overlay: rgb(15 42 39 / 0.35);
+  --radius: 14px;
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #121418;
-    --panel: #1a1d23;
-    --ink: #e7e9ed;
-    --muted: #979eab;
-    --faint: #5f6673;
-    --line: #272b33;
-    --hover: #20242b;
-    --accent: #7fb39f;
-    --accent-ink: #10221b;
-    --accent-soft: #1f2d28;
-    --danger: #f08b91;
-    --danger-soft: #331d20;
-    --warn: #e2b260;
-    --warn-soft: #33291a;
-    --open: #3987e5;
-    --done: #199e70;
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -16px rgb(0 0 0 / 0.6);
+    --bg: #0a1312;
+    --panel: #101c1a;
+    --sunken: #0d1817;
+    --ink: #e4f0ed;
+    --muted: #9ab0ac;
+    --faint: #62786f;
+    --line: #1d2e2b;
+    --line-strong: #2b423e;
+    --hover: #152422;
+    --accent: #2dd4bf;
+    --accent-hover: #5eead4;
+    --accent-ink: #042420;
+    --accent-soft: #103531;
+    --danger: #f87171;
+    --danger-soft: #2e1716;
+    --warn: #fbbf24;
+    --warn-soft: #2b2410;
+    --open: #60a5fa;
+    --done: #2dd4bf;
+    --overlay: rgb(0 0 0 / 0.55);
+    color-scheme: dark;
   }
 }
 
 @theme inline {
   --color-bg: var(--bg);
   --color-panel: var(--panel);
+  --color-sunken: var(--sunken);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-faint: var(--faint);
   --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
   --color-hover: var(--hover);
   --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
   --color-accent-ink: var(--accent-ink);
   --color-accent-soft: var(--accent-soft);
   --color-danger: var(--danger);
@@ -60,7 +77,7 @@
   --color-warn-soft: var(--warn-soft);
   --color-open: var(--open);
   --color-done: var(--done);
-  --font-sans: "Hanken Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
@@ -70,6 +87,7 @@ body {
   font-size: 16px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01";
 }
 
 :focus-visible {
@@ -77,17 +95,34 @@ body {
   outline-offset: 2px;
 }
 
+button:not(:disabled),
+[role="button"],
+select,
+summary,
+label:has(> input[type="checkbox"]) {
+  cursor: pointer;
+}
+
 @layer components {
+  /* Flat surface: hairline border, no shadow. */
   .panel {
-    @apply rounded-2xl border border-line bg-panel;
-    box-shadow: var(--shadow);
+    @apply border border-line bg-panel;
+    border-radius: var(--radius);
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.08em] text-muted;
+  }
+
+  .page-title {
+    @apply text-[28px] font-bold leading-[1.15] tracking-[-0.02em] sm:text-[34px];
   }
 
   .field {
-    @apply block w-full rounded-xl border border-line bg-panel px-4 py-3 text-base text-ink placeholder:text-faint transition-colors;
+    @apply block w-full rounded-[10px] border border-line-strong bg-panel px-3.5 py-2.5 text-base text-ink placeholder:text-faint transition-colors duration-150;
   }
   .field:hover {
-    border-color: color-mix(in srgb, var(--muted) 35%, var(--line));
+    border-color: var(--muted);
   }
   .field:focus {
     @apply outline-none;
@@ -96,19 +131,37 @@ body {
   }
 
   .btn {
-    @apply inline-flex items-center justify-center rounded-xl bg-accent px-5 py-3 font-semibold text-accent-ink transition-[filter,opacity] hover:brightness-110 disabled:opacity-60;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-[10px] bg-accent px-5 text-[15px] font-semibold text-accent-ink transition-colors duration-150 hover:bg-accent-hover disabled:opacity-60;
+  }
+  .btn-sm {
+    @apply min-h-9 px-3.5 text-sm;
+  }
+  .btn-outline {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-[10px] border border-line-strong bg-panel px-4 text-[15px] font-semibold text-ink transition-colors duration-150 hover:border-muted hover:bg-hover;
   }
   .btn-quiet {
-    @apply rounded-lg px-3 py-1.5 text-sm font-medium text-muted transition-colors hover:bg-hover hover:text-ink;
+    @apply inline-flex min-h-9 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-muted transition-colors duration-150 hover:bg-hover hover:text-ink;
   }
   .link {
     @apply font-semibold text-accent underline-offset-4 hover:underline;
   }
 
-  /* Round checkbox: fills with the accent and draws its tick. */
+  /* Segmented control (filters, priority). */
+  .segmented {
+    @apply inline-flex rounded-[10px] bg-sunken p-1 ring-1 ring-line;
+  }
+  .segment {
+    @apply inline-flex min-h-8 items-center gap-1.5 rounded-[7px] px-3 text-sm font-medium text-muted transition-colors duration-150 hover:text-ink;
+  }
+  .segment-on {
+    @apply bg-panel text-ink ring-1 ring-line-strong;
+  }
+
+  /* Square-ish checkbox with a drawn tick. */
   .check {
-    @apply grid size-[22px] shrink-0 place-items-center rounded-full border-[1.5px] transition-colors;
-    border-color: var(--faint);
+    @apply grid size-[22px] shrink-0 place-items-center rounded-[7px] border-2 transition-colors duration-150;
+    border-color: var(--line-strong);
+    background: var(--panel);
   }
   .check:hover {
     border-color: var(--accent);
@@ -117,12 +170,12 @@ body {
     @apply size-3;
     fill: none;
     stroke: var(--accent-ink);
-    stroke-width: 2.4;
+    stroke-width: 2.6;
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-dasharray: 16;
     stroke-dashoffset: 16;
-    transition: stroke-dashoffset 220ms ease-out 60ms;
+    transition: stroke-dashoffset 200ms ease-out 40ms;
   }
   .check-on {
     background: var(--accent);
@@ -136,29 +189,50 @@ body {
     transition: color 200ms;
     text-decoration-line: line-through;
     text-decoration-color: transparent;
-    text-decoration-thickness: 1px;
+    text-decoration-thickness: 1.5px;
   }
   .task-done {
     color: var(--faint);
     text-decoration-color: var(--faint);
   }
+
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-semibold;
+  }
+
+  /* Entrance for list rows and cards. */
+  .rise {
+    animation: rise 260ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .check svg { transition: none; }
+  .check svg {
+    transition: none;
+  }
+  .rise {
+    animation: none;
+  }
 }
 
 /* Rendered Markdown in subtask notes. */
 .note-body > * + * { margin-top: 0.6em; }
-.note-body h1, .note-body h2, .note-body h3 { font-weight: 600; line-height: 1.3; }
+.note-body h1, .note-body h2, .note-body h3 { font-weight: 700; line-height: 1.3; }
 .note-body h1 { font-size: 1.2em; }
 .note-body h2 { font-size: 1.1em; }
 .note-body ul { list-style: disc; padding-left: 1.3em; }
 .note-body ol { list-style: decimal; padding-left: 1.3em; }
 .note-body li + li { margin-top: 0.2em; }
 .note-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
-.note-body code { font-size: 0.88em; background: var(--hover); padding: 0.1em 0.35em; border-radius: 5px; }
-.note-body pre { background: var(--hover); padding: 0.75em 1em; border-radius: 10px; overflow-x: auto; }
+.note-body code { font-size: 0.88em; background: var(--sunken); padding: 0.1em 0.35em; border-radius: 5px; }
+.note-body pre { background: var(--sunken); padding: 0.75em 1em; border-radius: 10px; overflow-x: auto; }
 .note-body pre code { background: none; padding: 0; }
-.note-body blockquote { border-left: 3px solid var(--line); padding-left: 0.9em; color: var(--muted); }
+.note-body blockquote { border-left: 3px solid var(--line-strong); padding-left: 0.9em; color: var(--muted); }
 .note-body hr { border-color: var(--line); }

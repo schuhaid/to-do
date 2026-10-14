@@ -14,6 +14,7 @@ import {
 } from "recharts";
 import type { DashboardStats } from "@/lib/stats";
 import { DueBadge } from "@/components/Badges";
+import Icon, { type IconName } from "@/components/Icon";
 
 // Colors come from CSS variables, so charts follow light/dark mode automatically.
 const C = {
@@ -30,20 +31,23 @@ export default function DashboardCharts({ stats, today }: { stats: DashboardStat
   const { totals } = stats;
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatTile label="Open tasks" value={totals.open} href="/todos?filter=open" />
-        <StatTile label="Done" value={totals.done} href="/todos?filter=done" />
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        <StatTile label="Open tasks" value={totals.open} href="/todos?filter=open" icon="circle" tone="open" />
+        <StatTile label="Done" value={totals.done} href="/todos?filter=done" icon="check" tone="accent" />
         <StatTile
           label="Overdue"
           value={totals.overdue}
           href="/todos?due=overdue"
-          tone={totals.overdue > 0 ? "danger" : undefined}
+          icon="alert"
+          tone={totals.overdue > 0 ? "danger" : "muted"}
           note={totals.overdue > 0 ? `Oldest: ${totals.oldestOverdueDays} day${totals.oldestOverdueDays === 1 ? "" : "s"}` : "Nothing late"}
         />
         <StatTile
           label="Due in 7 days"
           value={totals.dueThisWeek}
           href="/todos?due=week"
+          icon="clock"
+          tone="warn"
           note={totals.dueToday > 0 ? `${totals.dueToday} due today` : undefined}
         />
       </div>
@@ -57,10 +61,10 @@ export default function DashboardCharts({ stats, today }: { stats: DashboardStat
               <YAxis type="category" dataKey="name" tick={AXIS_TICK} axisLine={false} tickLine={false} width={72} />
               <Tooltip cursor={{ fill: "var(--hover)" }} content={ChartTooltip} />
               <Bar dataKey="open" name="Open" stackId="s" fill={C.open} stroke="var(--panel)" strokeWidth={2} radius={[4, 0, 0, 4]}>
-                <LabelList dataKey="open" position="insideLeft" fill="#fff" fontSize={12} formatter={hideZero} />
+                <LabelList dataKey="open" position="insideLeft" fill="var(--accent-ink)" fontSize={12} fontWeight={600} formatter={hideZero} />
               </Bar>
               <Bar dataKey="done" name="Done" stackId="s" fill={C.done} stroke="var(--panel)" strokeWidth={2} radius={[0, 4, 4, 0]}>
-                <LabelList dataKey="done" position="insideRight" fill="#fff" fontSize={12} formatter={hideZero} />
+                <LabelList dataKey="done" position="insideRight" fill="var(--accent-ink)" fontSize={12} fontWeight={600} formatter={hideZero} />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
@@ -99,7 +103,7 @@ export default function DashboardCharts({ stats, today }: { stats: DashboardStat
             <ul className="mt-3 divide-y divide-line border-t border-line text-sm">
               {stats.upcoming.map((d) => (
                 <li key={d.id}>
-                  <Link href={`/todos/${d.todoId}`} className="flex items-center gap-3 py-2 hover:text-accent">
+                  <Link href={`/todos/${d.todoId}`} className="flex min-h-11 items-center gap-3 py-2 hover:text-accent">
                     <span className="min-w-0 flex-1 truncate">
                       {d.title}
                       {d.kind === "subtask" && <span className="text-faint"> · in {d.parent}</span>}
@@ -150,32 +154,49 @@ function StatTile({
   value,
   href,
   note,
+  icon,
   tone,
 }: {
   label: string;
   value: number;
   href: string;
   note?: string;
-  tone?: "danger";
+  icon: IconName;
+  tone: "open" | "accent" | "danger" | "warn" | "muted";
 }) {
+  const chip = {
+    open: "bg-open/10 text-open",
+    accent: "bg-accent-soft text-accent",
+    danger: "bg-danger-soft text-danger",
+    warn: "bg-warn-soft text-warn",
+    muted: "bg-sunken text-muted",
+  }[tone];
   return (
-    <Link href={href} className="panel block min-w-0 px-4 py-3.5 transition-colors hover:border-faint sm:px-5 sm:py-4">
-      <div className="text-sm text-muted">{label}</div>
-      <div className={`mt-1 text-3xl font-semibold tabular-nums tracking-tight ${tone === "danger" ? "text-danger" : ""}`}>
+    <Link
+      href={href}
+      className="panel rise group block min-w-0 p-4 transition-colors duration-150 hover:border-line-strong hover:bg-hover sm:p-5"
+    >
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-sm font-semibold text-muted">{label}</span>
+        <span className={`grid size-8 place-items-center rounded-[9px] ${chip}`} aria-hidden="true">
+          <Icon name={icon} className="size-[18px]" strokeWidth={2.1} />
+        </span>
+      </div>
+      <div className={`mt-2 text-[34px] font-bold leading-none tabular-nums tracking-[-0.03em] ${tone === "danger" ? "text-danger" : ""}`}>
         {value}
       </div>
-      {note && (
-        <div className={`mt-0.5 text-xs ${tone === "danger" ? "text-danger" : "text-faint"}`}>{note}</div>
-      )}
+      <div className={`mt-2 min-h-4 text-xs font-medium ${tone === "danger" ? "text-danger" : "text-muted"}`}>
+        {note ?? "\u00a0"}
+      </div>
     </Link>
   );
 }
 
 function Card({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
   return (
-    <section className="panel min-w-0 p-4 sm:p-5">
-      <h2 className="font-semibold">{title}</h2>
-      {subtitle && <p className="mb-3 text-sm text-muted">{subtitle}</p>}
+    <section className="panel rise min-w-0 p-5 sm:p-6">
+      <h2 className="font-bold">{title}</h2>
+      {subtitle && <p className="mb-4 mt-0.5 text-sm text-muted">{subtitle}</p>}
       {children}
     </section>
   );
@@ -186,7 +207,7 @@ function Legend({ items }: { items: { label: string; color: string }[] }) {
     <div className="mb-1 flex gap-4 text-xs text-muted">
       {items.map((i) => (
         <span key={i.label} className="inline-flex items-center gap-1.5">
-          <span className="size-2.5 rounded-sm" style={{ background: i.color }} aria-hidden="true" />
+          <span className="size-2.5 rounded-[3px]" style={{ background: i.color }} aria-hidden="true" />
           {i.label}
         </span>
       ))}
@@ -199,7 +220,7 @@ type TipEntry = { dataKey?: unknown; name?: unknown; value?: unknown; color?: st
 function ChartTooltip({ active, payload, label }: { active?: boolean; payload?: readonly TipEntry[]; label?: unknown }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-lg border border-line bg-panel px-3 py-2 text-xs shadow-md">
+    <div className="rounded-[10px] border border-line-strong bg-panel px-3 py-2 text-xs">
       <div className="mb-1 font-medium text-ink">{String(label)}</div>
       {payload.map((p) => (
         <div key={String(p.dataKey)} className="flex items-center gap-2 text-muted">
