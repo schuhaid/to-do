@@ -1,24 +1,12 @@
-// The app's name with its mark: a filled tick box, the same shape as the checkboxes.
+import Butterfly from "./Butterfly";
+
+// The butterfly next to the app name, as in the guide's "Header" combination:
+// gap between mark and name = half the mark's height. One colour: currentColor.
 export default function Wordmark({ size = "md" }: { size?: "md" | "lg" }) {
-  const box = size === "lg" ? 30 : 26;
+  const lg = size === "lg";
   return (
-    <span
-      className={`inline-flex items-center gap-2.5 font-bold tracking-[-0.02em] ${
-        size === "lg" ? "text-[22px]" : "text-lg"
-      }`}
-    >
-      <svg width={box} height={box} viewBox="0 0 26 26" aria-hidden="true">
-        <rect width="26" height="26" rx="8" className="fill-accent" />
-        <path
-          d="M7.5 13.5l3.6 3.6 7.4-8"
-          fill="none"
-          className="stroke-accent-ink"
-          strokeWidth="2.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <circle cx="21" cy="5" r="2.6" className="fill-warn" />
-      </svg>
+    <span className={`inline-flex items-center font-display font-semibold tracking-[-0.01em] ${lg ? "gap-4 text-[1.75rem]" : "gap-3 text-[1.25rem]"}`}>
+      <Butterfly className={lg ? "h-9 w-auto" : "h-7 w-auto"} />
       Ticked
     </span>
   );

@@ -39,7 +39,7 @@ export default async function TaskPage({ params }: PageProps<"/todos/[id]">) {
 
           <section className="panel overflow-hidden" aria-labelledby="subtasks-title">
             <div className="flex items-center justify-between gap-3 border-b border-line px-5 py-4 sm:px-6">
-              <h2 id="subtasks-title" className="flex items-center gap-2 font-bold">
+              <h2 id="subtasks-title" className="section-title flex items-center gap-2">
                 Subtasks
                 {total > 0 && (
                   <span className="rounded-full bg-sunken px-2 text-xs font-semibold tabular-nums text-muted">{total}</span>

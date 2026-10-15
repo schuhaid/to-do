@@ -1,80 +1,116 @@
 @import "tailwindcss";
 
 /*
-  Ticked design system — Apple-style.
-  System font with size-specific tracking, iOS grouped neutrals, one teal
-  action color, amber for "today". Chrome is translucent material that
-  content scrolls under; cards stay solid. Every text color meets WCAG AA
-  (4.5:1) on --panel and --bg except --faint, which is only used for
-  finished items and decoration.
+  Ticked — in the Daniel Schuhai corporate design (v1.0, Oct 2026).
+
+  Core colours: Ink #010310, Royal Blue #015AA0, Lavender #ECECFF, Cream #FFF7D3.
+  Ratio from the guide: light lavender/white surfaces dominate, Ink gives
+  contrast (the sidebar), Royal Blue for actions and progress, Cream as the
+  warm accent, Gold only for "today".
+  Type: Clash Display (headlines, navigation, numbers), DM Sans (text, UI),
+  Ephesis (claim and signature, once per page).
+  Every text colour meets WCAG AA (4.5:1) on --bg and --panel except --faint,
+  which is only used for finished items and decoration.
+
+  Deviations from the guide, for UI states the palette doesn't cover:
+  red for overdue/delete, and gold darkened to #7A6400 so "today" text stays
+  readable on Cream.
 */
 :root {
-  --bg: #f2f2f7;
+  /* Surfaces: lavender-white */
+  --bg: #f4f4fe;
   --panel: #ffffff;
-  --sunken: #ebebf0;
-  --ink: #1c1c1e;
-  --muted: #636366;
-  --faint: #8e8e93;
-  --line: #e5e5ea;
-  --line-strong: #d1d1d6;
-  --hover: #f5f5f8;
-  --accent: #0f766e;
-  --accent-hover: #0d655e;
-  --accent-ink: #ffffff;
-  --accent-soft: #dcf0ec;
-  --danger: #d70015;
-  --danger-soft: #ffeceb;
-  --warn: #b45309;
-  --warn-soft: #fef3c7;
-  --open: #0a63d6;
-  --done: #0f766e;
-  --overlay: rgb(0 0 0 / 0.28);
-  --radius: 14px;
+  --sunken: #ececff; /* Lavender */
+  --line: #e2e2f3;
+  --line-strong: #cbcce4;
+  --hover: #f0f0ff;
+
+  /* Text: Ink */
+  --ink: #010310;
+  --muted: #4d5072;
+  --faint: #8486a6;
+
+  /* Royal Blue: actions, links, progress. Text on it is Cream. */
+  --accent: #015aa0;
+  --accent-hover: #014b86;
+  --accent-ink: #fff7d3;
+  --accent-soft: #cce9ff; /* blue/100 */
+
+  /* States */
+  --danger: #b42318;
+  --danger-soft: #fdecec;
+  --warn: #7a6400; /* gold, darkened for text */
+  --warn-soft: #fff7d3; /* Cream */
+  --open: #015aa0;
+  --done: #1d677c; /* teal/700 */
+  --cream: #fff7d3;
+  --gold: #ffd100;
+
+  /* The Ink sidebar */
+  --side: #010310;
+  --side-ink: #ececff;
+  --side-muted: #9ea1c9;
+  --side-line: rgb(236 236 255 / 0.1);
+  --side-hover: rgb(236 236 255 / 0.07);
+  --side-active: rgb(255 247 211 / 0.1);
+
+  --overlay: rgb(1 3 16 / 0.4);
+  --radius: 16px;
   --segment-on: #ffffff;
 
-  /* Materials: light chrome over content, heavier for structure. */
-  --material: rgb(249 249 251 / 0.72);
-  --material-solid: #f9f9fb;
-  --material-heavy: #ebebf0;
+  /* Materials: lavender-tinted glass over content. */
+  --material: rgb(244 244 254 / 0.78);
+  --material-solid: #f4f4fe;
+  --material-heavy: #ececff;
   --material-edge: rgb(255 255 255 / 0.6);
-  --material-line: rgb(60 60 67 / 0.14);
-  --shadow-float: 0 1px 1px rgb(0 0 0 / 0.04), 0 8px 28px -6px rgb(0 0 0 / 0.18);
+  --material-line: rgb(1 3 16 / 0.1);
+  --shadow-float: 0 1px 1px rgb(1 3 16 / 0.04), 0 12px 32px -8px rgb(1 3 16 / 0.22);
 
-  --font-ui: -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI Variable Text", "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  --font-ui: "DM Sans Variable", "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --type-display: "Clash Display", "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --type-script: "Ephesis", cursive;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #000000;
-    --panel: #1c1c1e;
-    --sunken: #2c2c2e;
-    --ink: #f2f2f7;
-    --muted: #aeaeb2;
-    --faint: #76767c;
-    --line: #38383a;
-    --line-strong: #48484a;
-    --hover: #2c2c2e;
-    --accent: #2dd4bf;
-    --accent-hover: #5eead4;
-    --accent-ink: #032420;
-    --accent-soft: #10332f;
-    --danger: #ff6961;
-    --danger-soft: #3a1d1b;
-    --warn: #fbbf24;
-    --warn-soft: #33290f;
-    --open: #64a8ff;
-    --done: #2dd4bf;
-    --overlay: rgb(0 0 0 / 0.5);
-    --segment-on: #636366;
+    /* Ink ground, ink/700 panels */
+    --bg: #010310;
+    --panel: #0a0a29;
+    --sunken: #12123a;
+    --line: #1c1c46;
+    --line-strong: #2a2a5c;
+    --hover: #10103a;
 
-    --material: rgb(30 30 32 / 0.72);
-    --material-solid: #1e1e20;
-    --material-heavy: #121214;
-    --material-edge: rgb(255 255 255 / 0.07);
-    --material-line: rgb(84 84 88 / 0.6);
-    --shadow-float: 0 1px 1px rgb(0 0 0 / 0.3), 0 10px 32px -6px rgb(0 0 0 / 0.7);
+    --ink: #ececff;
+    --muted: #a3a6cf;
+    --faint: #6b6e98;
+
+    /* blue/300 on dark; Ink text on it */
+    --accent: #67bcfe;
+    --accent-hover: #8dcdfe;
+    --accent-ink: #010310;
+    --accent-soft: #001d33; /* blue/900 */
+
+    --danger: #ff8a80;
+    --danger-soft: #3a1414;
+    --warn: #ffd100; /* gold/500 */
+    --warn-soft: #332a00; /* gold/900 */
+    --open: #67bcfe;
+    --done: #83cde2; /* teal/300 */
+
+    --side: #05061a;
+    --side-line: rgb(236 236 255 / 0.08);
+
+    --overlay: rgb(0 0 0 / 0.6);
+    --segment-on: #2a2a5c;
+
+    --material: rgb(1 3 16 / 0.75);
+    --material-solid: #010310;
+    --material-heavy: #05061a;
+    --material-edge: rgb(236 236 255 / 0.06);
+    --material-line: rgb(236 236 255 / 0.1);
+    --shadow-float: 0 1px 1px rgb(0 0 0 / 0.4), 0 14px 40px -8px rgb(0 0 0 / 0.8);
     color-scheme: dark;
   }
 }
@@ -117,7 +153,14 @@
   --color-open: var(--open);
   --color-done: var(--done);
   --color-material-heavy: var(--material-heavy);
+  --color-cream: var(--cream);
+  --color-gold: var(--gold);
+  --color-side: var(--side);
+  --color-side-ink: var(--side-ink);
+  --color-side-muted: var(--side-muted);
   --font-sans: var(--font-ui);
+  --font-display: var(--type-display);
+  --font-script: var(--type-script);
 }
 
 html {
@@ -125,13 +168,13 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Body: system font at the user's chosen size, comfortable leading, near-zero tracking. */
+/* Body: DM Sans at the user's chosen size (Body/M: 16 / 150%). */
 body {
   background: var(--bg);
   color: var(--ink);
   font: 100%/1.5 var(--font-ui);
   font-optical-sizing: auto;
-  letter-spacing: -0.006em;
+  letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -193,17 +236,34 @@ label:has(> input[type="checkbox"]) {
     }
   }
 
+  /* Label/Eyebrow: DM Sans SemiBold, capitals, +12 % tracking, Royal Blue. */
   .eyebrow {
-    @apply text-[0.75rem] font-semibold uppercase text-muted;
-    letter-spacing: 0.06em;
+    @apply text-[0.75rem] font-semibold uppercase text-accent;
+    letter-spacing: 0.12em;
   }
 
-  /* Large title: tight leading and negative tracking as the size grows. */
+  /* Heading/H1: Clash Display Semibold, tight leading. */
   .page-title {
-    font-size: clamp(1.75rem, 1.35rem + 1.6vw, 2.125rem);
-    line-height: 1.12;
-    letter-spacing: -0.022em;
-    @apply font-bold;
+    font-family: var(--type-display);
+    font-size: clamp(2rem, 1.4rem + 2.2vw, 2.75rem);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
+
+  /* Heading/H3: Clash Display Medium, for section titles. */
+  .section-title {
+    font-family: var(--type-display);
+    font-size: 1.125rem;
+    line-height: 1.15;
+    font-weight: 500;
+  }
+
+  /* Script/Claim: Ephesis, once per page. */
+  .script {
+    font-family: var(--type-script);
+    font-weight: 400;
+    letter-spacing: 0;
   }
 
   .field {
@@ -220,13 +280,13 @@ label:has(> input[type="checkbox"]) {
   }
 
   .btn {
-    @apply press inline-flex min-h-11 items-center justify-center gap-2 rounded-[12px] bg-accent px-5 text-[0.9375rem] font-semibold text-accent-ink hover:bg-accent-hover disabled:opacity-50;
+    @apply press inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-accent px-6 text-[0.9375rem] font-semibold text-accent-ink hover:bg-accent-hover disabled:opacity-50;
   }
   .btn-sm {
-    @apply min-h-9 rounded-[10px] px-3.5 text-sm;
+    @apply min-h-9 px-4 text-sm;
   }
   .btn-outline {
-    @apply press inline-flex min-h-11 items-center justify-center gap-2 rounded-[12px] border border-line-strong bg-panel px-4 text-[0.9375rem] font-semibold text-ink hover:bg-hover;
+    @apply press inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-line-strong bg-panel px-5 text-[0.9375rem] font-semibold text-ink hover:bg-hover;
   }
   .btn-quiet {
     @apply press inline-flex min-h-9 items-center gap-1.5 rounded-[10px] px-3 text-sm font-medium text-muted hover:bg-hover hover:text-ink active:bg-sunken;
@@ -458,5 +518,26 @@ label:has(> input[type="checkbox"]) {
 @media (prefers-reduced-motion: reduce) {
   .swipe-pane > span {
     transition: none;
+  }
+}
+
+/* Rows in the Ink sidebar. Label/Nav: Clash Display; the current view is Cream. */
+@layer components {
+  .side-item {
+    @apply press flex min-h-11 w-full items-center gap-3 rounded-full px-4 font-display text-[1rem] font-medium tracking-[0.005em];
+    color: var(--side-muted);
+  }
+  .side-item:hover {
+    background: var(--side-hover);
+    color: var(--side-ink);
+  }
+  .side-item[aria-current="page"] {
+    background: var(--side-active);
+    color: var(--cream);
+  }
+  .side-kbd {
+    @apply rounded-md border px-1.5 font-sans text-[11px] font-semibold;
+    border-color: var(--side-line);
+    color: var(--side-muted);
   }
 }

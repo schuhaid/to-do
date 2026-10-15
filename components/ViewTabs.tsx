@@ -23,23 +23,10 @@ export function SideNav() {
       {VIEWS.map(({ href, label, key, icon }) => {
         const active = isActive(href);
         return (
-          <Link
-            key={href}
-            href={href}
-            aria-current={active ? "page" : undefined}
-            className={`press group flex min-h-11 items-center gap-3 rounded-[10px] px-3 text-[0.9375rem] font-semibold ${
-              active ? "bg-panel text-accent shadow-[0_1px_2px_rgb(0_0_0/0.06)]" : "text-muted hover:bg-hover hover:text-ink active:bg-sunken"
-            }`}
-          >
+          <Link key={href} href={href} aria-current={active ? "page" : undefined} className="side-item">
             <Icon name={icon} className="size-5" strokeWidth={active ? 2.1 : 1.8} />
             <span className="flex-1">{label}</span>
-            <kbd
-              className={`rounded-md border px-1.5 font-sans text-[11px] font-semibold ${
-                active ? "border-accent/30 text-accent" : "border-line text-faint group-hover:text-muted"
-              }`}
-            >
-              {key}
-            </kbd>
+            <kbd className="side-kbd">{key}</kbd>
           </Link>
         );
       })}

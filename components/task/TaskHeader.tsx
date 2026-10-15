@@ -56,7 +56,7 @@ export default function TaskHeader({ id, title, done }: { id: string; title: str
             maxLength={500}
             autoFocus
             onKeyDown={(e) => e.key === "Escape" && setEditing(false)}
-            className="field min-w-0 flex-1 text-lg font-bold"
+            className="field min-w-0 flex-1 font-display text-lg font-semibold"
           />
           <button type="submit" className="btn">Save</button>
           <button type="button" onClick={() => setEditing(false)} className="btn-quiet">Cancel</button>
@@ -64,7 +64,7 @@ export default function TaskHeader({ id, title, done }: { id: string; title: str
       ) : (
         <>
           <h1
-            className={`task-title min-w-0 flex-1 break-words text-[22px] font-bold leading-snug tracking-[-0.02em] sm:text-[28px] ${
+            className={`task-title min-w-0 flex-1 break-words font-display text-[1.625rem] font-semibold leading-[1.1] sm:text-[2rem] ${
               optimisticDone ? "task-done" : ""
             }`}
           >

@@ -17,7 +17,7 @@ function readColors() {
     done: v("--faint"),
     progress: v("--done"),
     overdue: v("--danger"),
-    today: v("--warn"),
+    today: v("--gold"),
     accent: v("--accent"),
     accentSoft: v("--accent-soft"),
     panel: v("--panel"),

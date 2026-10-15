@@ -34,7 +34,7 @@ export default async function TodosPage({ searchParams }: PageProps<"/todos">) {
       <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="eyebrow">{formatShortDate(today)}</p>
-          <h1 className="page-title mt-1">Your tasks</h1>
+          <h1 className="page-title mt-2">Your tasks</h1>
         </div>
         {todos.length > 0 && (
           <div className="w-full sm:w-56" aria-label={`${totalDone} of ${todos.length} tasks done`}>
@@ -74,7 +74,7 @@ export default async function TodosPage({ searchParams }: PageProps<"/todos">) {
           <span className="mb-4 grid size-12 place-items-center rounded-2xl bg-accent-soft text-accent" aria-hidden="true">
             <Icon name={todos.length === 0 || query.filter === "open" ? "check" : "search"} className="size-6" strokeWidth={2.2} />
           </span>
-          <p className="font-bold">{empty.title}</p>
+          <p className="section-title">{empty.title}</p>
           <p className="mt-1 max-w-xs text-sm text-muted">{empty.text}</p>
         </div>
       )}

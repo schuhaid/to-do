@@ -70,12 +70,12 @@ export default function KeyboardShortcuts() {
       <button
         type="button"
         onClick={() => dialogRef.current?.showModal()}
-        className="press flex min-h-11 w-full items-center gap-3 rounded-[10px] px-3 text-[0.9375rem] font-semibold text-muted hover:bg-hover hover:text-ink active:bg-sunken"
+        className="side-item"
         title="Keyboard shortcuts (?)"
       >
         <Icon name="keyboard" className="size-5" />
         <span className="flex-1 text-left">Shortcuts</span>
-        <kbd className="rounded-md border border-line px-1.5 font-sans text-[11px] font-semibold text-faint">?</kbd>
+        <kbd className="side-kbd">?</kbd>
       </button>
       <dialog
         ref={dialogRef}
@@ -85,7 +85,7 @@ export default function KeyboardShortcuts() {
       >
         <div className="p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 id="shortcuts-title" className="text-lg font-bold tracking-tight">Keyboard shortcuts</h2>
+            <h2 id="shortcuts-title" className="section-title text-[1.375rem]">Keyboard shortcuts</h2>
             <button
               type="button"
               onClick={() => dialogRef.current?.close()}
