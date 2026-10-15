@@ -54,7 +54,7 @@ export default function AuthForm({ mode, action, notice }: Props) {
     <form action={formAction} className="space-y-5">
       <div className="mb-8 space-y-2">
         <h1 className="page-title">{t.title}</h1>
-        <p className="text-muted">{t.intro}</p>
+        <p className="text-[1.0625rem] font-light text-muted">{t.intro}</p>
       </div>
 
       <label className="block space-y-1.5">

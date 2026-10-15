@@ -23,7 +23,7 @@ export default function FeedbackButton({ variant = "sidebar" }: { variant?: "sid
         }}
         className={
           variant === "sidebar"
-            ? "press flex min-h-11 w-full items-center gap-3 rounded-[10px] px-3 text-[0.9375rem] font-semibold text-muted hover:bg-hover hover:text-ink active:bg-sunken"
+            ? "side-item"
             : "press grid size-11 place-items-center rounded-full text-accent hover:bg-hover active:bg-sunken"
         }
         aria-label={variant === "compact" ? "Send feedback" : undefined}
@@ -58,7 +58,7 @@ function FeedbackForm({ titleId, onClose }: { titleId: string; onClose: () => vo
           <path d="M3.5 8.5l3 3 6-7" />
         </svg>
       </div>
-      <h2 id={titleId} className="text-lg font-bold tracking-tight">Feedback sent</h2>
+      <h2 id={titleId} className="section-title text-[1.375rem]">Feedback sent</h2>
       <p className="mt-1 text-sm text-muted">Thanks! The developer will read it and may reply by email.</p>
       <button type="button" onClick={onClose} className="btn mt-5 w-full">
         Close
@@ -67,7 +67,7 @@ function FeedbackForm({ titleId, onClose }: { titleId: string; onClose: () => vo
   ) : (
     <form action={action} className="space-y-4 p-6 pt-3 sm:pt-6">
       <div>
-        <h2 id={titleId} className="text-lg font-bold tracking-tight">Send feedback</h2>
+        <h2 id={titleId} className="section-title text-[1.375rem]">Send feedback</h2>
         <p className="text-sm text-muted">Found a bug or have an idea? It goes straight to the developer.</p>
       </div>
       <label className="block space-y-1.5">

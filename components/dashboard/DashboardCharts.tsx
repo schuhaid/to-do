@@ -32,14 +32,15 @@ export default function DashboardCharts({ stats, today }: { stats: DashboardStat
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-        <StatTile label="Open tasks" value={totals.open} href="/todos?filter=open" icon="circle" tone="open" />
-        <StatTile label="Done" value={totals.done} href="/todos?filter=done" icon="check" tone="accent" />
+        <StatTile label="Open tasks" value={totals.open} href="/todos?filter=open" icon="circle" surface="white" />
+        <StatTile label="Done" value={totals.done} href="/todos?filter=done" icon="check" surface="blue" />
         <StatTile
           label="Overdue"
           value={totals.overdue}
           href="/todos?due=overdue"
           icon="alert"
-          tone={totals.overdue > 0 ? "danger" : "muted"}
+          surface="ink"
+          alert={totals.overdue > 0}
           note={totals.overdue > 0 ? `Oldest: ${totals.oldestOverdueDays} day${totals.oldestOverdueDays === 1 ? "" : "s"}` : "Nothing late"}
         />
         <StatTile
@@ -47,7 +48,7 @@ export default function DashboardCharts({ stats, today }: { stats: DashboardStat
           value={totals.dueThisWeek}
           href="/todos?due=week"
           icon="clock"
-          tone="warn"
+          surface="cream"
           note={totals.dueToday > 0 ? `${totals.dueToday} due today` : undefined}
         />
       </div>
@@ -149,43 +150,45 @@ function hideZero(value: unknown) {
   return typeof value === "number" && value > 0 ? value : "";
 }
 
+// The four tiles echo the "Werte" row of the corporate design:
+// white, Royal Blue, Ink and Cream surfaces, each with its own text colour.
+const SURFACES = {
+  white: "bg-panel text-ink border border-line",
+  blue: "bg-[#015aa0] text-[#fff7d3]",
+  ink: "bg-[#010310] text-[#ececff] dark:border dark:border-line-strong",
+  cream: "bg-[#fff7d3] text-[#010310]",
+} as const;
+
 function StatTile({
   label,
   value,
   href,
   note,
   icon,
-  tone,
+  surface,
+  alert,
 }: {
   label: string;
   value: number;
   href: string;
   note?: string;
   icon: IconName;
-  tone: "open" | "accent" | "danger" | "warn" | "muted";
+  surface: keyof typeof SURFACES;
+  alert?: boolean;
 }) {
-  const chip = {
-    open: "bg-open/10 text-open",
-    accent: "bg-accent-soft text-accent",
-    danger: "bg-danger-soft text-danger",
-    warn: "bg-warn-soft text-warn",
-    muted: "bg-sunken text-muted",
-  }[tone];
   return (
     <Link
       href={href}
-      className="panel rise group block min-w-0 p-4 transition-colors duration-150 hover:border-line-strong hover:bg-hover sm:p-5"
+      className={`rise group flex min-h-36 min-w-0 flex-col rounded-[var(--radius)] p-4 transition-[transform,filter] duration-150 hover:brightness-[1.04] active:scale-[0.98] sm:p-5 ${SURFACES[surface]}`}
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="text-sm font-semibold text-muted">{label}</span>
-        <span className={`grid size-8 place-items-center rounded-[9px] ${chip}`} aria-hidden="true">
-          <Icon name={icon} className="size-[18px]" strokeWidth={2.1} />
-        </span>
+        <span className="text-sm font-medium opacity-80">{label}</span>
+        <Icon name={icon} className="size-[18px] opacity-70" strokeWidth={2} />
       </div>
-      <div className={`mt-2 text-[34px] font-bold leading-none tabular-nums tracking-[-0.03em] ${tone === "danger" ? "text-danger" : ""}`}>
+      <div className="mt-auto pt-6 font-display text-[2.75rem] font-semibold leading-none tabular-nums">
         {value}
       </div>
-      <div className={`mt-2 min-h-4 text-xs font-medium ${tone === "danger" ? "text-danger" : "text-muted"}`}>
+      <div className={`mt-2 min-h-4 text-xs font-medium ${alert ? "text-[#ff8a80]" : "opacity-75"}`}>
         {note ?? "\u00a0"}
       </div>
     </Link>
@@ -195,7 +198,7 @@ function StatTile({
 function Card({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
   return (
     <section className="panel rise min-w-0 p-5 sm:p-6">
-      <h2 className="font-bold">{title}</h2>
+      <h2 className="section-title">{title}</h2>
       {subtitle && <p className="mb-4 mt-0.5 text-sm text-muted">{subtitle}</p>}
       {children}
     </section>

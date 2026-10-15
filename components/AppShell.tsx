@@ -16,27 +16,30 @@ export default async function AppShell({ children }: { children: React.ReactNode
 
   return (
     <div className="flex flex-1">
-      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-line bg-material-heavy px-3 py-6 lg:flex">
-        <div className="mb-8 px-3">
+      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col bg-side px-3 py-7 text-side-ink lg:flex">
+        <div className="mb-10 px-4">
           <Wordmark />
         </div>
-        <p className="eyebrow mb-2 px-3">Views</p>
+        <p className="mb-3 px-4 text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-side-muted">Views</p>
         <SideNav />
 
         <div className="mt-auto space-y-1">
           <FeedbackButton />
           <KeyboardShortcuts />
-          <div className="flex items-center gap-3 rounded-[12px] bg-panel px-3 py-2.5">
-            <span className="grid size-8 shrink-0 place-items-center rounded-full bg-accent-soft text-sm font-bold text-accent" aria-hidden="true">
+          <div className="mt-4 flex items-center gap-3 border-t border-[var(--side-line)] px-4 pt-5">
+            <span
+              className="grid size-9 shrink-0 place-items-center rounded-full bg-cream font-display text-[0.9375rem] font-semibold text-[#010310]"
+              aria-hidden="true"
+            >
               {initial}
             </span>
-            <span className="min-w-0 flex-1 truncate text-sm text-muted" title={user.email}>
+            <span className="min-w-0 flex-1 truncate text-sm text-side-muted" title={user.email}>
               {user.email}
             </span>
             <form action={logout}>
               <button
                 type="submit"
-                className="press grid size-9 place-items-center rounded-full text-muted hover:bg-danger-soft hover:text-danger"
+                className="press grid size-9 place-items-center rounded-full text-side-muted hover:bg-[var(--side-hover)] hover:text-side-ink"
                 aria-label="Log out"
                 title="Log out"
               >
@@ -44,6 +47,7 @@ export default async function AppShell({ children }: { children: React.ReactNode
               </button>
             </form>
           </div>
+          <p className="script px-4 pt-4 text-[1.375rem] leading-none text-side-muted">Daniel Schuhai</p>
         </div>
       </aside>
 
@@ -57,7 +61,7 @@ export default async function AppShell({ children }: { children: React.ReactNode
                   type="submit"
                   aria-label="Log out"
                   title="Log out"
-                  className="press grid size-11 place-items-center rounded-full text-accent hover:bg-hover active:bg-sunken"
+                  className="press grid size-11 place-items-center rounded-full text-ink hover:bg-hover active:bg-sunken"
                 >
                   <Icon name="logout" className="size-[22px]" />
                 </button>
@@ -66,7 +70,7 @@ export default async function AppShell({ children }: { children: React.ReactNode
           }
         />
 
-        <div className="mx-auto w-full max-w-5xl flex-1 px-4 pb-[calc(env(safe-area-inset-bottom)+6rem)] pt-2 sm:px-8 lg:px-10 lg:pb-16 lg:pt-10">
+        <div className="mx-auto w-full max-w-5xl flex-1 px-4 pb-[calc(env(safe-area-inset-bottom)+6rem)] pt-2 sm:px-8 lg:px-12 lg:pb-16 lg:pt-14">
           {children}
         </div>
 

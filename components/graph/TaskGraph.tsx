@@ -126,7 +126,7 @@ function SizeControl({ value, onChange }: { value: SizeBy; onChange: (v: SizeBy)
 function Legend({ sizeBy }: { sizeBy: SizeBy }) {
   const items = [
     { label: "Open", cls: "bg-open" },
-    { label: "Due today", cls: "bg-warn" },
+    { label: "Due today", cls: "bg-gold" },
     { label: "Overdue", cls: "bg-danger" },
     { label: "Done", cls: "bg-faint" },
   ];
